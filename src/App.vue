@@ -1,12 +1,10 @@
 <script setup>
 import { useAppStore } from '@/stores/app'
 const app = useAppStore()
-
-import { UserOutlined, MenuUnfoldOutlined,  MenuFoldOutlined, VideoCameraOutlined } from '@ant-design/icons-vue';
-
+import { OrderedListOutlined, UserOutlined, MenuUnfoldOutlined,  MenuFoldOutlined, VideoCameraOutlined } from '@ant-design/icons-vue';
 import { useAuthStore } from '@/stores/auth'
 const auth = useAuthStore()
-
+import routes from '@/router/routes'
 import { ref } from 'vue';
 const selectedKeys = ref(['1', '3']);
 const collapsed = ref(false);
@@ -19,17 +17,22 @@ const collapsed = ref(false);
   </div>
   <a-layout style="height: 100%">
     <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
-      <h1 style="color: white; font-size: 25px; padding: 10px; text-align: center">Mana4.0</h1>
+      <h1 style="color: white; font-size: 25px; padding: 10px; text-align: center">
+        {{ !collapsed ? app.appName : app.appShortName }}
+      </h1>
       <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="vertical">
-        <a-menu-item key="1">
-<!--          <user-outlined />-->
-<!--          <span>-->
-<!--            <router-link to="/home">Công ty/ Cửa hàng</router-link>-->
-<!--          </span>-->
-          <router-link to="/home">
-            <user-outlined />
+        <a-menu-item v-for="item in routes" key="1">
+          <router-link :to="item.path">
             <span>
-              Công ty/ Cửa hàng
+              {{ item.meta.name }}
+            </span>
+          </router-link>
+        </a-menu-item>
+        <a-menu-item key="1">
+          <router-link to="/home">
+            <OrderedListOutlined />
+            <span>
+              Công ty/Cửa hàng
             </span>
           </router-link>
         </a-menu-item>
