@@ -4,10 +4,9 @@ import { useAppStore } from '@/stores/app'
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     isAuthenticated: false,
-    currentUser: null,
+    currentUser: null
   }),
-  getters: {
-  },
+  getters: {},
   actions: {
     authenticate(params) {
       const app = useAppStore()
@@ -15,10 +14,9 @@ export const useAuthStore = defineStore('auth', {
       try {
         console.log(params)
       } catch (error) {
-
       } finally {
         app.setLoading(false)
       }
-    },
-  },
+    }
+  }
 })
