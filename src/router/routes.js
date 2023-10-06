@@ -1,53 +1,53 @@
-import HomeView from '@/views/HomeView.vue'
-import AboutView from '@/views/AboutView.vue'
-import { reactive, watch, h } from 'vue'
-import {
-  OrderedListOutlined,
-  UserOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  VideoCameraOutlined
-} from '@ant-design/icons-vue'
+import List from '@/views/company/List.vue'
+import Create from '@/views/company/Create.vue'
+import Edit from '@/views/company/Edit.vue'
+import EmptyLayout from '../components/layouts/EmptyLayout.vue'
+import ListAdmin from '@/views/admin/List.vue'
 
 const routes = [
   {
     path: '/companies',
-    name: 'home',
-    component: HomeView,
+    name: 'company',
+    component: EmptyLayout,
     meta: {
-      icon: OrderedListOutlined,
-      name: 'Công ty/Cửa hàng'
-    }
-  },
-  {
-    path: '/admins',
-    name: 'sub',
-    component: AboutView,
-    meta: {
-      icon: '<UserOutlined />',
-      name: 'Quản trị viên'
+      name: 'Công ty/Cửa hàng',
+      showSubMenu: true
     },
     children: [
       {
-        path: '/sub1',
-        name: 'sub1',
-        component: AboutView,
+        path: 'list',
+        name: 'company.list',
+        component: List,
         meta: {
-          icon: '<OrderedListOutlined />',
-          name: 'Sub1'
+          name: 'List company'
         }
       },
       {
-        path: '/sub2',
-        name: 'sub2',
-        component: AboutView,
+        path: 'create',
+        name: 'company.create',
+        component: Create,
         meta: {
-          icon: '<OrderedListOutlined />',
-          name: 'Sub2'
+          name: 'Create company'
+        }
+      },
+      {
+        path: 'edit',
+        name: 'company.edit',
+        component: Edit,
+        meta: {
+          name: 'Edit company',
         }
       }
     ]
-  }
+  },
+  {
+    path: '/admins',
+    name: 'admin',
+    component: ListAdmin,
+    meta: {
+      name: 'Quản trị viên',
+    },
+  },
 ]
 
 export default routes

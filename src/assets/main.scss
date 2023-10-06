@@ -14,4 +14,11 @@
     align-items: center;
     justify-content: center;
   }
+  .ant-menu {
+    .ant-menu-item,
+    .ant-menu-submenu,
+    .ant-menu-submenu-title {
+      border-radius: 0px;
+    }
+  }
 }

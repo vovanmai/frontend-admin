@@ -12,7 +12,6 @@ export const useAuthStore = defineStore('auth', {
       const app = useAppStore()
       app.setLoading()
       try {
-        console.log(params)
       } catch (error) {
       } finally {
         app.setLoading(false)

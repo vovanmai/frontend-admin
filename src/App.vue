@@ -13,8 +13,12 @@ import { useAuthStore } from '@/stores/auth'
 const auth = useAuthStore()
 import routes from '@/router/routes'
 import { ref } from 'vue'
+import { useRoute, useRouter } from "vue-router";
 const selectedKeys = ref([''])
 const collapsed = ref(false)
+const router = useRouter()
+const route = useRoute()
+// console.log(router.currentRoute.value)
 </script>
 
 <template>
@@ -26,8 +30,8 @@ const collapsed = ref(false)
       <h1 style="color: white; font-size: 25px; padding: 10px; text-align: center">
         {{ !collapsed ? app.appName : app.appShortName }}
       </h1>
-      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="vertical">
-        <menu-item v-for="route in routes" :item="route"></menu-item>
+      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
+        <menu-item v-for="(item, index) in routes" :item="item" :key="index"></menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
