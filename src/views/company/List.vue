@@ -10,7 +10,5 @@ import {useRoute, useRouter} from "vue-router";
 const app = useAppStore()
 const router = useRouter()
 const route = useRoute()
-// console.log(router.currentRoute.value)
-// console.log(Math.floor(Date.now() / 1000))
 </script>
 <style></style>

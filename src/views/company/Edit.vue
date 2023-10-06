@@ -9,6 +9,5 @@ import {useRoute, useRouter} from "vue-router";
 const app = useAppStore()
 const router = useRouter()
 const route = useRoute()
-// console.log(router.currentRoute.value)
 </script>
 <style></style>

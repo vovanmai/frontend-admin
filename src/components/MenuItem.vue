@@ -21,7 +21,6 @@ const selectItem = (item) => {
   }
   return router.push({name: item.name})
 }
-console.log(123)
 </script>
 
 <template>
