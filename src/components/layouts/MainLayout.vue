@@ -1,30 +1,30 @@
 <template>
   <a-layout style="height: 100%">
-    <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
+    <a-layout-sider v-model:collapsed="state.collapsed" :trigger="null" collapsible>
       <h1 style="color: white; font-size: 25px; padding: 10px; text-align: center">
-        {{ !collapsed ? app.appName : app.appShortName }}
+        {{ !state.collapsed ? app.appName : app.appShortName }}
       </h1>
-      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
-        <menu-item v-for="(item, index) in mainRoutes" :item="item" :key="index"></menu-item>
+      <a-menu v-model:selectedKeys="state.selectedKeys" v-model:openKeys="state.openKeys" theme="dark" mode="inline">
+        <menu-item @select-item="selectItem" v-for="(item, index) in mainRoutes" :item="item" :key="index"></menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
       <a-layout-header
-          style="display: flex; align-items: center; background: #fff; padding: 10px 20px"
+        style="display: flex; align-items: center; background: #fff; padding: 10px 20px"
       >
         <menu-unfold-outlined
-            v-if="collapsed"
-            class="collapsed-trigger"
-            @click="() => (collapsed = !collapsed)"
+          v-if="state.collapsed"
+          class="collapsed-trigger"
+          @click="() => (state.collapsed = !state.collapsed)"
         />
         <menu-fold-outlined
-            v-else
-            class="collapsed-trigger"
-            @click="() => (collapsed = !collapsed)"
+          v-else
+          class="collapsed-trigger"
+          @click="() => (state.collapsed = !state.collapsed)"
         />
       </a-layout-header>
       <a-layout-content
-          :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"
+        :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"
       >
         <router-view></router-view>
       </a-layout-content>
@@ -46,13 +46,32 @@
   import { useAuthStore } from '@/stores/auth'
   const auth = useAuthStore()
   import mainRoutes from '../../router/main'
-  import { ref } from 'vue'
+  import { ref, reactive } from 'vue'
   import { useRoute, useRouter } from "vue-router";
-  const selectedKeys = ref([''])
-  const collapsed = ref(false)
   const router = useRouter()
   const route = useRoute()
-  console.log(router.currentRoute.value)
+  const state = reactive({
+    collapsed: false,
+    selectedKeys: [],
+    openKeys: [],
+  });
+  if (router.currentRoute.value.meta.showSubMenu === false) {
+    state.selectedKeys = [router.currentRoute.value.meta.parentName]
+  } else {
+    state.selectedKeys = [router.currentRoute.value.name]
+  }
+
+  if (router.currentRoute.value.meta.parentName) {
+    state.openKeys = [router.currentRoute.value.meta.parentName]
+  }
+
+  const selectItem = (item) => {
+    if (item.meta.parentName) {
+      state.openKeys = [item.meta.parentName]
+    } else {
+      state.openKeys = []
+    }
+  }
 </script>
 
 <style scoped>

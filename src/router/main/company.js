@@ -18,7 +18,8 @@ const routes = {
       name: 'company.list',
       component: List,
       meta: {
-        name: 'List company'
+        name: 'List company',
+        parentName: 'company',
       }
     },
     {
@@ -26,7 +27,8 @@ const routes = {
       name: 'company.create',
       component: Create,
       meta: {
-        name: 'Create company'
+        name: 'Create company',
+        parentName: 'company',
       }
     },
     {
@@ -35,6 +37,7 @@ const routes = {
       component: Edit,
       meta: {
         name: 'Edit company',
+        parentName: 'company',
       }
     }
   ]

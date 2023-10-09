@@ -15,16 +15,20 @@ const props = defineProps({
     required: true
   }
 })
+
+const emit = defineEmits(['selectItem'])
+
 const selectItem = (item) => {
   if (!item.showSubMenu && item.children && item.children[0]) {
     return router.push({name: item.children[0].name})
   }
+  emit('selectItem', item)
   return router.push({name: item.name})
 }
 </script>
 
 <template>
-  <a-sub-menu v-if="item.meta.showSubMenu && item.children && item.children.length">
+  <a-sub-menu v-if="item.meta.showSubMenu && item.children && item.children.length" :key="item.name">
     <template #title>
       <user-outlined />
       <span>{{ item.meta.name }}</span>
