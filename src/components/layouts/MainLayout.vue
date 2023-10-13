@@ -23,10 +23,22 @@
           @click="() => (state.collapsed = !state.collapsed)"
         />
       </a-layout-header>
-      <a-layout-content
-        :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"
-      >
-        <router-view></router-view>
+      <a-layout-content>
+        <a-breadcrumb style="margin: 16px 16px">
+          <a-breadcrumb-item>
+            <home-outlined />
+          </a-breadcrumb-item>
+          <a-breadcrumb-item>
+            <user-outlined />
+            <a href="http://localhost:5173/companies/edit">
+              <span>Application List</span>
+            </a>
+          </a-breadcrumb-item>
+          <a-breadcrumb-item>Application</a-breadcrumb-item>
+        </a-breadcrumb>
+        <div :style="{ margin: '0px 16px', padding: '24px', background: '#fff', minHeight: '100%' }">
+          <router-view></router-view>
+        </div>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -38,6 +50,7 @@
   const app = useAppStore()
   import {
     OrderedListOutlined,
+    HomeOutlined,
     UserOutlined,
     MenuUnfoldOutlined,
     MenuFoldOutlined,
@@ -46,7 +59,7 @@
   import { useAuthStore } from '@/stores/auth'
   const auth = useAuthStore()
   import mainRoutes from '../../router/main'
-  import { ref, reactive } from 'vue'
+  import { ref, reactive, watch } from 'vue'
   import { useRoute, useRouter } from "vue-router";
   const router = useRouter()
   const route = useRoute()
@@ -72,6 +85,11 @@
       state.openKeys = []
     }
   }
+
+  watch(() => route.name, () => {
+    console.log(route.name)
+  });
+
 </script>
 
 <style scoped>
