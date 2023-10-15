@@ -1,6 +1,6 @@
 <template>
-  <a-layout style="height: 100%">
-    <a-layout-sider v-model:collapsed="state.collapsed" :trigger="null" collapsible>
+  <a-layout>
+    <a-layout-sider :width="220" :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }" v-model:collapsed="state.collapsed" :trigger="null" collapsible>
       <h1 style="color: white; font-size: 25px; padding: 10px; text-align: center">
         {{ !state.collapsed ? app.appName : app.appShortName }}
       </h1>
@@ -8,19 +8,19 @@
         <menu-item @select-item="selectItem" v-for="(item, index) in mainRoutes" :item="item" :key="index"></menu-item>
       </a-menu>
     </a-layout-sider>
-    <a-layout>
+    <a-layout :style="{ marginLeft: state.marginLeft, height: '100%' }">
       <a-layout-header
-        style="display: flex; align-items: center; background: #fff; padding: 10px 20px"
+        style="display: flex; align-items: center; background: #fff; padding: 0px 20px; height: 54px"
       >
         <menu-unfold-outlined
           v-if="state.collapsed"
           class="collapsed-trigger"
-          @click="() => (state.collapsed = !state.collapsed)"
+          @click="toggle()"
         />
         <menu-fold-outlined
           v-else
           class="collapsed-trigger"
-          @click="() => (state.collapsed = !state.collapsed)"
+          @click="toggle()"
         />
       </a-layout-header>
       <a-layout-content>
@@ -67,6 +67,7 @@
     collapsed: false,
     selectedKeys: [],
     openKeys: [],
+    marginLeft: '220px',
   });
   if (router.currentRoute.value.meta.showSubMenu === false) {
     state.selectedKeys = [router.currentRoute.value.meta.parentName]
@@ -83,6 +84,16 @@
       state.openKeys = [item.meta.parentName]
     } else {
       state.openKeys = []
+    }
+  }
+
+  const toggle = () => {
+    if (state.collapsed) {
+      state.collapsed = !state.collapsed
+      state.marginLeft = '220px'
+    } else {
+      state.marginLeft = '80px'
+      state.collapsed = !state.collapsed
     }
   }
 
