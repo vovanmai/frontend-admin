@@ -1,6 +1,6 @@
 <template>
   <a-layout>
-    <a-layout-sider :width="220" :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }" v-model:collapsed="state.collapsed" :trigger="null" collapsible>
+    <a-layout-sider :width="200" :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }" v-model:collapsed="state.collapsed" :trigger="null" collapsible>
       <h1 style="color: white; font-size: 25px; padding: 10px; text-align: center">
         {{ !state.collapsed ? app.appName : app.appShortName }}
       </h1>
@@ -67,7 +67,7 @@
     collapsed: false,
     selectedKeys: [],
     openKeys: [],
-    marginLeft: '220px',
+    marginLeft: '200px',
   });
   if (router.currentRoute.value.meta.showSubMenu === false) {
     state.selectedKeys = [router.currentRoute.value.meta.parentName]
@@ -90,7 +90,7 @@
   const toggle = () => {
     if (state.collapsed) {
       state.collapsed = !state.collapsed
-      state.marginLeft = '220px'
+      state.marginLeft = '200px'
     } else {
       state.marginLeft = '80px'
       state.collapsed = !state.collapsed
