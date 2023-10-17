@@ -69,7 +69,8 @@
     openKeys: [],
     marginLeft: '200px',
   });
-  if (router.currentRoute.value.meta.showSubMenu === false) {
+
+  if (router.currentRoute.value.meta.isShowSubMenu === false) {
     state.selectedKeys = [router.currentRoute.value.meta.parentName]
   } else {
     state.selectedKeys = [router.currentRoute.value.name]
@@ -98,7 +99,12 @@
   }
 
   watch(() => route.name, () => {
-    console.log(route.name)
+    if (router.currentRoute.value.meta.isShowSubMenu === false) {
+      state.selectedKeys = [router.currentRoute.value.meta.parentName]
+    } else {
+      state.selectedKeys = [router.currentRoute.value.name]
+      state.openKeys = [router.currentRoute.value.meta.parentName]
+    }
   });
 
 </script>

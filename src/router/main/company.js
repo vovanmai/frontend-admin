@@ -10,7 +10,7 @@ const routes = {
   component: EmptyLayout,
   meta: {
     name: 'Công ty/Cửa hàng',
-    showSubMenu: false
+    isShowSubMenu: false
   },
   children: [
     {

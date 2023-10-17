@@ -10,6 +10,10 @@ const routes = [
     meta: {},
     children: mainRoutes
   },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: "/error/404",
+  }
 ]
 
 export default routes

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useAppStore = defineStore('app', {
   state: () => ({
-    isLoading: true,
+    isLoading: false,
     appName: 'Mana4.0',
     appShortName: 'M4.0'
   }),

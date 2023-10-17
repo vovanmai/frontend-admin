@@ -4,18 +4,21 @@
       <a-input @input="setValue" placeholder="Basic usage" />
 
       <template #overlay>
-
         <a-menu>
-          <div><a-spin size="small" /></div>
-          <a-menu-item>
-            <a href="javascript:;">1st menu item</a>
-          </a-menu-item>
-          <a-menu-item>
-            <a href="javascript:;">2nd menu item</a>
-          </a-menu-item>
-          <a-menu-item>
-            <a href="javascript:;">3rd menu item</a>
-          </a-menu-item>
+          hih
+          hih
+          hih
+          hih
+          hih
+          hih
+          hih
+          hih
+          hih
+          hih
+          hih
+          hih
+          hih
+          hih
         </a-menu>
       </template>
     </a-dropdown>
