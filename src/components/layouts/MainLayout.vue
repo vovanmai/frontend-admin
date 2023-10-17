@@ -25,16 +25,17 @@
       </a-layout-header>
       <a-layout-content>
         <a-breadcrumb style="margin: 16px 16px">
-          <a-breadcrumb-item>
-            <home-outlined />
+          <a-breadcrumb-item v-for="(item, index) in state.breadcrumbs" :key="index">
+            {{item.icon}}
+            <router-link v-if="item.route" :to="{ name: item.route }">
+              <icon v-if="item.icon" :name="item.icon"></icon>
+              <span style="margin-inline-start: 4px">{{ item.name }}</span>
+            </router-link>
+            <template v-else>
+              <icon v-if="item.icon" :name="item.icon"></icon>
+              <span>{{ item.name }}</span>
+            </template>
           </a-breadcrumb-item>
-          <a-breadcrumb-item>
-            <user-outlined />
-            <a href="http://localhost:5173/companies/edit">
-              <span>Application List</span>
-            </a>
-          </a-breadcrumb-item>
-          <a-breadcrumb-item>Application</a-breadcrumb-item>
         </a-breadcrumb>
         <div :style="{ margin: '0px 16px', padding: '24px', background: '#fff', minHeight: '100%' }">
           <router-view></router-view>
@@ -53,8 +54,10 @@
     LayoutContent as ALayoutContent,
     Breadcrumb as ABreadcrumb,
     BreadcrumbItem as ABreadcrumbItem,
+    Space as ASpace,
   } from 'ant-design-vue'
   import { useAppStore } from '@/stores/app'
+  import Icon from '@/components/Icon.vue'
   import MenuItem from '@/components/MenuItem.vue'
   const app = useAppStore()
   import {
@@ -77,6 +80,7 @@
     selectedKeys: [],
     openKeys: [],
     marginLeft: '200px',
+    breadcrumbs: [],
   });
 
   if (router.currentRoute.value.meta.isShowSubMenu === false) {
@@ -113,6 +117,14 @@
     } else {
       state.selectedKeys = [router.currentRoute.value.name]
       state.openKeys = [router.currentRoute.value.meta.parentName]
+    }
+
+    console.log(router.currentRoute.value.meta.breadcrumbs)
+    if (router.currentRoute.value.meta.breadcrumbs && router.currentRoute.value.meta.breadcrumbs.length) {
+      state.breadcrumbs = router.currentRoute.value.meta.breadcrumbs
+      console.log(router.currentRoute.value.meta.breadcrumbs)
+    } else {
+      state.breadcrumbs = []
     }
   });
 

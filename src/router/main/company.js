@@ -10,7 +10,8 @@ const routes = {
   component: EmptyLayout,
   meta: {
     name: 'Công ty/Cửa hàng',
-    isShowSubMenu: false
+    isShowSubMenu: false,
+    icon: 'HomeOutlined'
   },
   children: [
     {
@@ -20,6 +21,16 @@ const routes = {
       meta: {
         name: 'List company',
         parentName: 'company',
+        breadcrumbs: [
+          {
+            name: 'Công ty/Cửa hàng',
+            route: 'company.list',
+            icon: 'HomeOutlined'
+          },
+          {
+            name: 'Danh sách',
+          }
+        ]
       }
     },
     {

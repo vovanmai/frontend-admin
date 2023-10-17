@@ -32,18 +32,18 @@ const selectItem = (item) => {
     :key="item.name"
   >
     <template #title>
-      <icon></icon>
+      <icon :name="item.meta.icon"></icon>
       <span>{{ item.meta.name }}</span>
     </template>
     <a-menu-item v-for="sub in item.children" :key="sub.name" @click="selectItem(sub)">
-      <icon></icon>
+      <icon :name="item.meta.icon"></icon>
       <span>
         {{ sub.meta.name }}
       </span>
     </a-menu-item>
   </a-sub-menu>
   <a-menu-item test v-else-if="item.meta.isShowOnMenu !== false" :key="item.name" @click="selectItem(item)">
-    <icon></icon>
+    <icon :name="item.meta.icon"></icon>
       <span>
         {{ item.meta.name }}
       </span>
