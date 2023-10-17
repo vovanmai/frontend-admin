@@ -1,5 +1,8 @@
 <script setup>
 import { useAppStore } from '@/stores/app'
+import {
+  Spin as ASpin,
+} from 'ant-design-vue'
 const app = useAppStore()
 </script>
 

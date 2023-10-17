@@ -45,6 +45,15 @@
 </template>
 
 <script setup>
+  import {
+    Menu as AMenu,
+    Layout as ALayout,
+    LayoutSider as ALayoutSider,
+    LayoutHeader as ALayoutHeader,
+    LayoutContent as ALayoutContent,
+    Breadcrumb as ABreadcrumb,
+    BreadcrumbItem as ABreadcrumbItem,
+  } from 'ant-design-vue'
   import { useAppStore } from '@/stores/app'
   import MenuItem from '@/components/MenuItem.vue'
   const app = useAppStore()

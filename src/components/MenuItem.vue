@@ -1,15 +1,12 @@
 <script setup>
-import { useRouter, useRoute } from 'vue-router'
-const router = useRouter()
-const route = useRoute()
+import { useRouter } from 'vue-router'
 import {
-  OrderedListOutlined,
-  UserOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  VideoCameraOutlined
-} from '@ant-design/icons-vue'
-const props = defineProps({
+  SubMenu as ASubMenu,
+  MenuItem as AMenuItem,
+} from 'ant-design-vue'
+import Icon from '@/components/Icon.vue'
+const router = useRouter()
+defineProps({
   item: {
     type: Object,
     required: true
@@ -35,18 +32,18 @@ const selectItem = (item) => {
     :key="item.name"
   >
     <template #title>
-      <user-outlined />
+      <icon></icon>
       <span>{{ item.meta.name }}</span>
     </template>
     <a-menu-item v-for="sub in item.children" :key="sub.name" @click="selectItem(sub)">
-      <OrderedListOutlined />
+      <icon></icon>
       <span>
         {{ sub.meta.name }}
       </span>
     </a-menu-item>
   </a-sub-menu>
   <a-menu-item test v-else-if="item.meta.isShowOnMenu !== false" :key="item.name" @click="selectItem(item)">
-      <OrderedListOutlined />
+    <icon></icon>
       <span>
         {{ item.meta.name }}
       </span>
