@@ -1,47 +1,16 @@
 <template>
-  <div class="about">
-    <a-dropdown :open="state.open">
-      <a-input @input="setValue" placeholder="Basic usage" />
-
-      <template #overlay>
-        <a-menu>
-          hih
-          hih
-          hih
-          hih
-          hih
-          hih
-          hih
-          hih
-          hih
-          hih
-          hih
-          hih
-          hih
-          hih
-        </a-menu>
-      </template>
-    </a-dropdown>
-  </div>
+  <Breadcrumb></Breadcrumb>
+  <a-card :loading="false" size="small" title="Small size card" class="mt-15 w-100">
+    <template #extra><a href="#">more</a></template>
+    <p>card content</p>
+    <p>card content</p>
+    <p>card content</p>
+  </a-card>
 </template>
 <script setup>
+import Breadcrumb from '@/components/Breadcrumb.vue'
 import {
-  Dropdown as ADropdown,
-  Menu as AMenu,
-  Input as AInput,
+  Card as ACard
 } from 'ant-design-vue'
-import { useAppStore } from '@/stores/app'
-import {useRoute, useRouter} from "vue-router";
-import {reactive} from "vue";
-const app = useAppStore()
-const router = useRouter()
-const route = useRoute()
-const state = reactive({
-  value: '',
-  open: false,
-});
-const setValue = (e) => {
-  state.open = e.target.value != '' ? true : false;
-}
 </script>
 <style></style>
