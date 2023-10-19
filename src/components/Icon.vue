@@ -16,7 +16,6 @@ const props = defineProps({
 
 const name = props.name
 let component = null
-console.log('icon:' + name)
 
 if (name == 'OrderedListOutlined') {
   component = OrderedListOutlined

@@ -1,4 +1,5 @@
 @import './base.css';
+//$main-color: #14b8a6;
 
 .pt-15 {
   padding-top: 15px;
@@ -14,6 +15,15 @@
 
 .w-100 {
   width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 0em;
 }
 
 #app {
@@ -34,7 +44,36 @@
     .ant-menu-item,
     .ant-menu-submenu,
     .ant-menu-submenu-title {
-      border-radius: 0px;
+      border-radius: 0;
     }
   }
+  .ant-card {
+    border-radius: 2px;
+  }
+  .ant-input {
+    border-radius: 2px;
+  }
+  .ant-form-item {
+    margin-bottom: 12px;
+  }
+  //.ant-menu-item-selected {
+  //  background-color: $main-color !important;
+  //}
+  .ant-btn {
+    border-radius: 2px;
+  }
+  //.ant-btn-primary:not(:disabled) {
+  //  background-color: $main-color;
+  //  color: #ffffff;
+  //}
+  //.ant-btn-default:not(:disabled):hover {
+  //  color: $main-color;
+  //  border-color: $main-color;
+  //}
+  .pl-0 {
+    padding-left: 0;
+  }
+  //.ant-btn-link:not(:disabled) {
+  //  color: $main-color;
+  //}
 }
