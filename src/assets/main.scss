@@ -16,6 +16,9 @@
 .w-100 {
   width: 100%;
 }
+.pr-5 {
+  padding-right: 5px;
+}
 
 h1,
 h2,
@@ -50,9 +53,10 @@ h6 {
   .ant-card {
     border-radius: 2px;
   }
-  .ant-input {
+  .ant-input, .ant-input-affix-wrapper, .ant-picker {
     border-radius: 2px;
   }
+
   .ant-form-item {
     margin-bottom: 12px;
   }
@@ -76,4 +80,12 @@ h6 {
   //.ant-btn-link:not(:disabled) {
   //  color: $main-color;
   //}
+
+  .ant-card-extra {
+    padding: 7px 0;
+  }
+  .ant-table-column-title {
+    color: rgba(0, 0, 0, 0.88);
+    font-weight: 600;
+  }
 }

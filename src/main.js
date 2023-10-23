@@ -1,5 +1,6 @@
 import 'ant-design-vue/dist/reset.css'
 import './assets/main.scss'
+import 'dayjs/locale/vi';
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
