@@ -16,64 +16,71 @@
         <a-col class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="code"
+            label="Mã code"
             :rules="state.rules.code"
           >
-            <a-input v-model:value="state.formSearch.code" placeholder="Mã code" />
+            <a-input v-model:value="state.formSearch.code" placeholder="" />
           </a-form-item>
         </a-col>
         <a-col class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="name"
+            label="Tên"
             :rules="state.rules.name"
           >
-            <a-input v-model:value="state.formSearch.name" placeholder="Tên" />
+            <a-input v-model:value="state.formSearch.name" placeholder="" />
           </a-form-item>
         </a-col>
         <a-col class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="email"
+            label="Email"
             :rules="state.rules.email"
           >
-            <a-input v-model:value="state.formSearch.email" placeholder="Email" />
+            <a-input v-model:value="state.formSearch.email" placeholder="" />
           </a-form-item>
         </a-col>
         <a-col v-show="state.isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="tax_code"
+            label="Mã số thuế"
           >
-            <a-input placeholder="Mã số thuế" />
+            <a-input placeholder="" />
           </a-form-item>
         </a-col>
         <a-col v-show="state.isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="representative"
+            label="Người đại diện"
           >
-            <a-input placeholder="Người đại diện" />
+            <a-input placeholder="" />
           </a-form-item>
         </a-col>
         <a-col v-show="state.isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="phone"
+            label="Số điện thoại"
           >
-            <a-input placeholder="Số điện thoại" />
+            <a-input placeholder="" />
           </a-form-item>
         </a-col>
         <a-col v-show="state.isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="address"
+            label="Địa chỉ"
           >
-            <a-input placeholder="Địa chỉ" />
+            <a-input placeholder="" />
           </a-form-item>
         </a-col>
         <a-col v-show="state.isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
-            name="start_date"
+            name="business_date"
+            label="Ngày kinh doanh"
           >
             <a-date-picker
               v-model:value="state.formSearch.start_date"
               value-format="YYYY-MM-DD"
-              :locale="locale"
-              placeholder="Địa chỉ"
+              placeholder=""
               class="w-100"
             />
           </a-form-item>
@@ -82,20 +89,24 @@
           <a-form-item
             name="start_date"
           >
+            <template #label>
+              <a-tooltip title="Bắt đầu hợp đồng">
+                Bắt đầu hợp đồng
+              </a-tooltip>
+            </template>
             <a-range-picker
               class="w-100"
-              :placeholder="['Ngày bắt đầu hợp đồng', 'Ngày kết thúc hợp đồng']"
-              :locale="locale"
+              :placeholder="['Thời gian bắt đầu', 'Thời gian kết thúc']"
             />
           </a-form-item>
         </a-col>
         <a-col
-            class="gutter-row"
-            :xs="{ span: 24}"
-            :sm="{ span: 12}"
-            :md="{ span: 12}"
-            :lg="{ span: 6}"
-            :xl="{ span: 6, offset: state.offset}" >
+          class="gutter-row d-flex align-item-end"
+          :xs="{ span: 24}"
+          :sm="{ span: 12}"
+          :md="{ span: 12}"
+          :lg="{ span: 6}"
+          :xl="{ span: 6, offset: state.offset}">
           <a-form-item>
             <a-space>
               <a-tooltip title="Tìm kiếm">
@@ -129,34 +140,40 @@
     </template>
     <a-table
       :scroll="{ x: true }"
-      :showSorterTooltip="f"
+      :showSorterTooltip="false"
       bordered
       :columns="columns"
       :data-source="state.companyList"
       :loading="false"
+      :pagination="state.pagination"
+      @change="handleTableChange"
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
-          <a-space>
-            <a-tooltip title="Sửa">
-              <a-button
-                type="primary"
-              ><EditOutlined /></a-button>
-            </a-tooltip>
-            <a-tooltip title="Chi tiết">
-              <a-button
-                  style="background: #14b8a6; color: #ffffff"
-              ><InfoCircleOutlined />
-              </a-button>
-            </a-tooltip>
-            <a-tooltip title="Xóa">
-              <a-button
-                type="primary"
-                danger
-              ><DeleteOutlined />
-              </a-button>
-            </a-tooltip>
-          </a-space>
+          <a-dropdown
+            arrow
+            placement="bottom"
+          >
+            <div class="action-menu">
+              <img src="@/assets/img/icons/icon-action.svg" alt="">
+            </div>
+            <template #overlay>
+              <a-menu>
+                <a-menu-item>
+                  <EditOutlined />
+                  <span class="ml-5">Chỉnh sửa</span>
+                </a-menu-item>
+                <a-menu-item>
+                  <InfoCircleOutlined />
+                  <span class="ml-5">Chi tiết</span>
+                </a-menu-item>
+                <a-menu-item>
+                  <DeleteOutlined />
+                  <span class="ml-5">Xóa</span>
+                </a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
         </template>
       </template>
     </a-table>
@@ -177,6 +194,10 @@ import {
   DatePicker as ADatePicker,
   RangePicker as ARangePicker,
   Table as ATable,
+  Pagination as APagination,
+  Menu as AMenu,
+  MenuItem as AMenuItem,
+  Dropdown as ADropdown,
 } from 'ant-design-vue'
 import {
   SearchOutlined,
@@ -189,9 +210,9 @@ import {
   DeleteOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons-vue'
-import locale from 'ant-design-vue/es/date-picker/locale/vi_VN';
-import { reactive, ref } from 'vue';
+import { reactive, ref, computed } from 'vue';
 const formRef = ref(null);
+
 const state = reactive({
   isShowMore: false,
   offset: 0,
@@ -219,8 +240,15 @@ const state = reactive({
       email: 'email2',
     }
   ],
+  pagination: {
+    total: 5000,
+    current: 1,
+    pageSize: 10,
+    showTotal: (total, range) => `Tổng ${total}`,
+  },
   rules: {
     code: [
+      // { required: true },
       { max: 50, message: 'Tối đa là 50 ký tự.' },
     ],
     name: [
@@ -268,9 +296,15 @@ const columns = [
   {
     title: 'Hành động',
     key: 'action',
-    width: '15%',
+    width: '10%',
   },
 ];
+
+const handleTableChange = (params) => {
+  state.pagination.current = params.current
+  state.pagination.pageSize = params.pageSize
+  state.pagination.total = params.total
+}
 </script>
 <style>
 

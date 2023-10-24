@@ -5,12 +5,17 @@
     <p>card content</p>
     <p>card content</p>
     <p>card content</p>
+    <a-form-item label="UserName" name="username" :rules="[{ required: true }]">
+      <a-input  :width="200" />
+    </a-form-item>
   </a-card>
 </template>
 <script setup>
 import Breadcrumb from '@/components/Breadcrumb.vue'
 import {
-  Card as ACard
+  Card as ACard,
+  FormItem as AFormItem,
+  Input as AInput,
 } from 'ant-design-vue'
 </script>
 <style></style>
