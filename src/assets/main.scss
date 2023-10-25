@@ -21,6 +21,9 @@ h6 {
 .m-20 {
   margin: 20px;
 }
+.mb-25 {
+  margin-bottom: 25px;
+}
 
 .w-100 {
   width: 100%;
@@ -39,6 +42,14 @@ h6 {
 
 .align-item-end {
   align-items: end;
+}
+
+.align-item-center {
+  align-items: center;
+}
+
+.justify-content-center {
+  justify-content: center;
 }
 
 
@@ -73,9 +84,6 @@ h6 {
     }
   }
 
-  .ant-form-item {
-    margin-bottom: 12px;
-  }
   //.ant-menu-item-selected {
   //  background-color: $main-color !important;
   //}
@@ -111,7 +119,13 @@ h6 {
     height: 40px;
   }
   .action-menu:hover {
-    background: #ffffff;
+    background: rgba(99, 115, 129, 0.08);
+  }
+
+  .card-search {
+    .ant-form-item {
+      margin-bottom: 12px;
+    }
   }
 }
 .ant-form-item-label {

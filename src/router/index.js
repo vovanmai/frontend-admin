@@ -8,8 +8,9 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  const app = useAppStore()
+  // const app = useAppStore()
   // app.setLoading()
+  document.title = (to.meta.title ?? 'Mana4.0') + '- Mana4.0'
 })
 
 router.afterEach((to, from) => {})

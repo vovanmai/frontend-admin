@@ -21,6 +21,7 @@ const routes = {
       meta: {
         name: 'List company',
         parentName: 'company',
+        title: 'Danh sách công ty/Cửa hàng',
         breadcrumbs: [
           {
             name: 'Công ty/Cửa hàng',
@@ -40,6 +41,17 @@ const routes = {
       meta: {
         name: 'Create company',
         parentName: 'company',
+        title: 'Tạo mới công ty/Cửa hàng',
+        breadcrumbs: [
+          {
+            name: 'Công ty/Cửa hàng',
+            route: 'company.list',
+            icon: 'HomeOutlined'
+          },
+          {
+            name: 'Tạo mới',
+          }
+        ]
       }
     },
     {
