@@ -13,13 +13,12 @@
       label="Loại dịch vụ"
       name="service_type"
       :rules="state.rules.service_type"
-      @validate="validateForm"
     >
-      <a-input v-model:value="form.service_type" />
+      <a-input ref="refServiceType" v-model:value="form.service_type" />
     </a-form-item>
     <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
       <a-space>
-        <a-button @click="changeStep(0)">Trở lại</a-button>
+        <a-button @click="previousStep(0)">Trở lại</a-button>
         <a-button type="primary" html-type="submit">Tiếp tục</a-button>
       </a-space>
     </a-form-item>
@@ -40,8 +39,12 @@ import {
   UnorderedListOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue'
-import { reactive, defineProps, defineEmits, ref } from 'vue'
+import {onMounted, reactive, ref} from 'vue'
 const refForm = ref(null)
+const refServiceType = ref(null)
+onMounted(() => {
+  refServiceType.value.focus()
+})
 const props = defineProps({
   form: {
     type: Object,
@@ -64,13 +67,6 @@ const onFinish = values => {
   emit('submitSuccess', step)
   emit('changeStep', 2)
 };
-
-const changeStep = step => {
-  emit('changeStep', step)
-};
-const onFinishFailed = errorInfo => {
-};
-
 const validateForm = async () => {
   try {
     await refForm.value.validateFields()
@@ -79,6 +75,16 @@ const validateForm = async () => {
     return false
   }
 };
+
+const previousStep = async (step) => {
+  const isValid = await validateForm()
+  if (isValid) {
+    emit('changeStep', step)
+  }
+};
+const onFinishFailed = errorInfo => {
+};
+
 defineExpose({
   validateForm,
 })

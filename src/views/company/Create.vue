@@ -23,7 +23,7 @@
       ></a-steps>
     </div>
     <CreateBasicCompany
-      ref="basicCompany"
+      ref="basicCompanyRef"
       style="margin-top: 25px"
       v-if="state.currentStep === 0"
       :form="state.form.basic"
@@ -31,24 +31,24 @@
       @changeStep="changeStep"
     />
     <CreateSettingCompany
-      ref="settingCompany"
+      ref="settingCompanyRef"
       style="margin-top: 25px"
-      v-show="state.currentStep === 1"
+      v-if="state.currentStep === 1"
       :form="state.form.setting"
       @submit-success="submitSuccess"
       @change-step="changeStep"
     />
     <CreateAdmin
-      ref="adminCompany"
+      ref="adminCompanyRef"
       style="margin-top: 25px"
-      v-show="state.currentStep === 2"
+      v-if="state.currentStep === 2"
       :form="state.form.setting"
       @submit-success="submitSuccess"
       @change-step="changeStep"
     />
     <CreateConfirm
       style="margin-top: 25px"
-      v-show="state.currentStep === 3"
+      v-if="state.currentStep === 3"
       :form="state.form.setting"
       @submit-success="1"
     />
@@ -74,9 +74,9 @@ import {
   PlusOutlined,
 } from '@ant-design/icons-vue'
 import { reactive, ref } from 'vue'
-const basicCompany = ref(null)
-const settingCompany = ref(null)
-const adminCompany = ref(null)
+const basicCompanyRef = ref(null)
+const settingCompanyRef = ref(null)
+const adminCompanyRef = ref(null)
 
 const state = reactive({
   currentStep: 0,
@@ -130,10 +130,13 @@ const changeStep = (step) => {
 };
 
 const changeStepOnStep = async (step) => {
-  if (state.currentStep === 1) {
-    if (await settingCompany.value.validateForm()) {
-      state.currentStep = step
-    }
+  if (
+      (state.currentStep === 0 && await basicCompanyRef.value.validateForm())
+      || (state.currentStep === 1 && await settingCompanyRef.value.validateForm())
+      || (state.currentStep === 2 && await adminCompanyRef.value.validateForm())
+      || state.currentStep === 3
+  ) {
+    state.currentStep = step
   }
 };
 

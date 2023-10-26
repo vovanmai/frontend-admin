@@ -1,7 +1,7 @@
 <template>
   <a-form
     :model="form"
-    name="basic"
+    ref="refForm"
     :label-col="{ span: 8 }"
     :wrapper-col="{ span: 9 }"
     autocomplete="off"
@@ -39,8 +39,8 @@ import {
   UnorderedListOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue'
-import { reactive, defineProps, defineEmits } from 'vue'
-
+import { reactive, ref } from 'vue'
+const refForm = ref(null)
 const props = defineProps({
   form: {
     type: Object,
@@ -67,5 +67,17 @@ const onFinishFailed = errorInfo => {
 const changeStep = step => {
   emit('changeStep', step)
 };
+
+const validateForm = async () => {
+  try {
+    await refForm.value.validateFields()
+    return true
+  } catch (error) {
+    return false
+  }
+};
+defineExpose({
+  validateForm,
+})
 </script>
 <style></style>

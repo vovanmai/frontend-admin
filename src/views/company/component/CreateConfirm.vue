@@ -15,7 +15,7 @@ import {
   UnorderedListOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue'
-import { reactive, defineProps, defineEmits } from 'vue'
+import { reactive } from 'vue'
 
 const props = defineProps({
   form: {
