@@ -14,46 +14,52 @@
     <div class="d-flex justify-content-center" style="padding: 25px 0">
       <a-steps
         :current="state.currentStep"
-        :items="steps"
-        style="max-width: 750px"
+        :items="state.steps"
+        type="navigation"
+        :status="!state.stepStatusValidate ? 'error' : 'process'"
+        style="max-width: 1000px"
+        @change="changeStepOnStep"
+        @submit-success="submitSuccess"
       ></a-steps>
     </div>
-    <a-form
-      v-if="state.currentStep == 0"
-      :model="state.form.basic"
-      name="basic"
-      :label-col="{ span: 8 }"
-      :wrapper-col="{ span: 9 }"
-      autocomplete="off"
-      @finish="onFinish"
-      @finishFailed="onFinishFailed"
-    >
-      <a-form-item
-        has-feedback
-        label="Mã code"
-        name="code"
-        :rules="state.rules.code"
-      >
-        <a-input v-model:value="state.form.basic.code" />
-      </a-form-item>
-
-      <a-form-item
-        has-feedback
-        label="Tên"
-        name="name"
-        :rules="state.rules.name"
-      >
-        <a-input v-model:value="state.form.basic.name" />
-      </a-form-item>
-
-      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit">Tiếp tục</a-button>
-      </a-form-item>
-    </a-form>
+    <CreateBasicCompany
+      ref="basicCompany"
+      style="margin-top: 25px"
+      v-if="state.currentStep === 0"
+      :form="state.form.basic"
+      @submit-success="submitSuccess"
+      @changeStep="changeStep"
+    />
+    <CreateSettingCompany
+      ref="settingCompany"
+      style="margin-top: 25px"
+      v-show="state.currentStep === 1"
+      :form="state.form.setting"
+      @submit-success="submitSuccess"
+      @change-step="changeStep"
+    />
+    <CreateAdmin
+      ref="adminCompany"
+      style="margin-top: 25px"
+      v-show="state.currentStep === 2"
+      :form="state.form.setting"
+      @submit-success="submitSuccess"
+      @change-step="changeStep"
+    />
+    <CreateConfirm
+      style="margin-top: 25px"
+      v-show="state.currentStep === 3"
+      :form="state.form.setting"
+      @submit-success="1"
+    />
   </a-card>
 </template>
 <script setup>
 import Breadcrumb from '@/components/Breadcrumb.vue'
+import CreateBasicCompany from '@/views/company/component/CreateBasicCompany.vue'
+import CreateSettingCompany from '@/views/company/component/CreateSettingCompany.vue'
+import CreateAdmin from '@/views/company/component/CreateAdmin.vue'
+import CreateConfirm from '@/views/company/component/CreateConfirm.vue'
 import {
   Card as ACard,
   Button as AButton,
@@ -67,28 +73,44 @@ import {
   UnorderedListOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue'
-import { reactive } from 'vue'
-const steps = [
-  {
-    title: 'Thông tin cơ bản',
-  },
-  {
-    title: 'Thiết lập các thông số',
-  },
-  {
-    title: 'Xác nhận',
-  },
-]
+import { reactive, ref } from 'vue'
+const basicCompany = ref(null)
+const settingCompany = ref(null)
+const adminCompany = ref(null)
+
 const state = reactive({
   currentStep: 0,
+  stepStatusValidate: true,
+  steps: [
+    {
+      title: 'Thông tin cơ bản',
+    },
+    {
+      title: 'Thiết lập cài đặt',
+      disabled: true,
+    },
+    {
+      title: 'Tạo quản trị viên',
+      description: 'Supper Admin',
+      disabled: true,
+    },
+    {
+      title: 'Xác nhận',
+      disabled: true,
+    },
+  ],
   form: {
     basic: {
       code: '',
       name: '',
     },
     setting: {
-
-    }
+      service_type: ''
+    },
+    company_admin: {
+      name: '',
+      email: '',
+    },
   },
   rules: {
     code: [
@@ -99,15 +121,24 @@ const state = reactive({
     ]
   }
 })
-const formState = reactive({
-  username: '',
-  password: '',
-  remember: true,
-});
 const onFinish = values => {
-  state.currentStep = state.currentStep + 1
 };
 const onFinishFailed = errorInfo => {
+};
+const changeStep = (step) => {
+  state.currentStep = step
+};
+
+const changeStepOnStep = async (step) => {
+  if (state.currentStep === 1) {
+    if (await settingCompany.value.validateForm()) {
+      state.currentStep = step
+    }
+  }
+};
+
+const submitSuccess = (step) => {
+  state.steps[step].disabled = false
 };
 </script>
 <style></style>
