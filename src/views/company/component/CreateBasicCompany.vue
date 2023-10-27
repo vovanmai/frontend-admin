@@ -62,9 +62,10 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['submitSuccess', 'changeStep'])
+const emit = defineEmits(['validateSuccess', 'changeStep'])
 
 const step = 0
+const nextStep = 1
 
 const state = reactive({
   rules: {
@@ -72,13 +73,13 @@ const state = reactive({
       { required: true, message: 'Không được rỗng.' }
     ],
     name: [
-      // { required: true, message: 'Không được rỗng.' }
+      { required: true, message: 'Không được rỗng.' }
     ]
   }
 })
 const onFinish = values => {
-  emit('submitSuccess', step)
-  emit('changeStep', 1)
+  emit('validateSuccess', step)
+  emit('changeStep', nextStep)
 };
 const onFinishFailed = errorInfo => {
 };

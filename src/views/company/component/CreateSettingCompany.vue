@@ -18,7 +18,7 @@
     </a-form-item>
     <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
       <a-space>
-        <a-button @click="previousStep(0)">Trở lại</a-button>
+        <a-button @click="goToPreviousStep">Trở lại</a-button>
         <a-button type="primary" html-type="submit">Tiếp tục</a-button>
       </a-space>
     </a-form-item>
@@ -52,8 +52,11 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['submitSuccess', 'changeStep'])
+const emit = defineEmits(['validateSuccess', 'changeStep'])
+
+const previousStep = 0
 const step = 1
+const nextStep = 2
 
 const state = reactive({
   rules: {
@@ -64,7 +67,7 @@ const state = reactive({
   validatedForm: false,
 })
 const onFinish = values => {
-  emit('submitSuccess', step)
+  emit('validateSuccess', step)
   emit('changeStep', 2)
 };
 const validateForm = async () => {
@@ -76,10 +79,11 @@ const validateForm = async () => {
   }
 };
 
-const previousStep = async (step) => {
+const goToPreviousStep = async () => {
   const isValid = await validateForm()
   if (isValid) {
-    emit('changeStep', step)
+    emit('changeStep', previousStep)
+    emit('validateSuccess', step)
   }
 };
 const onFinishFailed = errorInfo => {

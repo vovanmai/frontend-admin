@@ -15,42 +15,41 @@
       <a-steps
         :current="state.currentStep"
         :items="state.steps"
-        type="navigation"
+        type="navigation1"
         :status="!state.stepStatusValidate ? 'error' : 'process'"
         style="max-width: 1000px"
         @change="changeStepOnStep"
-        @submit-success="submitSuccess"
       ></a-steps>
     </div>
     <CreateBasicCompany
       ref="basicCompanyRef"
       style="margin-top: 25px"
       v-if="state.currentStep === 0"
-      :form="state.form.basic"
-      @submit-success="submitSuccess"
+      :form="state.form.company_basic"
+      @validate-success="validateSuccess"
       @changeStep="changeStep"
     />
     <CreateSettingCompany
       ref="settingCompanyRef"
       style="margin-top: 25px"
       v-if="state.currentStep === 1"
-      :form="state.form.setting"
-      @submit-success="submitSuccess"
+      :form="state.form.company_setting"
+      @validate-success="validateSuccess"
       @change-step="changeStep"
     />
     <CreateAdmin
       ref="adminCompanyRef"
       style="margin-top: 25px"
       v-if="state.currentStep === 2"
-      :form="state.form.setting"
-      @submit-success="submitSuccess"
+      :form="state.form.company_admin"
+      @validate-success="validateSuccess"
       @change-step="changeStep"
     />
     <CreateConfirm
       style="margin-top: 25px"
       v-if="state.currentStep === 3"
-      :form="state.form.setting"
-      @submit-success="1"
+      :data="state.form"
+      @submit="handleCreateCompany"
     />
   </a-card>
 </template>
@@ -100,11 +99,11 @@ const state = reactive({
     },
   ],
   form: {
-    basic: {
+    company_basic: {
       code: '',
       name: '',
     },
-    setting: {
+    company_setting: {
       service_type: ''
     },
     company_admin: {
@@ -127,6 +126,10 @@ const onFinishFailed = errorInfo => {
 };
 const changeStep = (step) => {
   state.currentStep = step
+
+  if (step === 3) {
+    state.steps[step].disabled = false
+  }
 };
 
 const changeStepOnStep = async (step) => {
@@ -136,12 +139,18 @@ const changeStepOnStep = async (step) => {
       || (state.currentStep === 2 && await adminCompanyRef.value.validateForm())
       || state.currentStep === 3
   ) {
+    state.steps[state.currentStep].disabled = false
     state.currentStep = step
   }
 };
 
-const submitSuccess = (step) => {
+const validateSuccess = (step) => {
+  console.log(step)
   state.steps[step].disabled = false
 };
+
+const handleCreateCompany = () => {
+  console.log('handleCreateCompany')
+}
 </script>
 <style></style>

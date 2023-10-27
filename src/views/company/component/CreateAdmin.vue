@@ -10,6 +10,14 @@
   >
     <a-form-item
       has-feedback
+      label="Tên"
+      name="name"
+      :rules="state.rules.name"
+    >
+      <a-input ref="refInput" v-model:value="form.name" />
+    </a-form-item>
+    <a-form-item
+      has-feedback
       label="Email"
       name="email"
       :rules="state.rules.email"
@@ -18,7 +26,7 @@
     </a-form-item>
     <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
       <a-space>
-        <a-button @click="changeStep(1)">Trở lại</a-button>
+        <a-button @click="goToPreviousStep">Trở lại</a-button>
         <a-button type="primary" html-type="submit">Tiếp tục</a-button>
       </a-space>
     </a-form-item>
@@ -39,28 +47,38 @@ import {
   UnorderedListOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue'
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref} from 'vue'
 const refForm = ref(null)
+const refInput = ref(null)
+onMounted(() => {
+  refInput.value.focus()
+})
+
 const props = defineProps({
   form: {
     type: Object,
     required: true
   }
 })
+const previousStep = 1
 const step = 2
+const nextStep = 3
 
-const emit = defineEmits(['submitSuccess', 'changeStep'])
+const emit = defineEmits(['validateSuccess', 'changeStep'])
 
 const state = reactive({
   rules: {
+    name: [
+      { required: true, message: 'Không được rỗng.' }
+    ],
     email: [
       { required: true, message: 'Không được rỗng.' }
     ],
   }
 })
 const onFinish = values => {
-  emit('submitSuccess', step)
-  emit('changeStep', 3)
+  emit('validateSuccess', step)
+  emit('changeStep', nextStep)
 };
 const onFinishFailed = errorInfo => {
 };
@@ -74,6 +92,13 @@ const validateForm = async () => {
     return true
   } catch (error) {
     return false
+  }
+};
+const goToPreviousStep = async () => {
+  const isValid = await validateForm()
+  if (isValid) {
+    emit('changeStep', previousStep)
+    emit('validateSuccess', step)
   }
 };
 defineExpose({

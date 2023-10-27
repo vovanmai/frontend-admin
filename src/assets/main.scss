@@ -18,6 +18,10 @@ h6 {
   margin-top: 15px;
 }
 
+.mt-25 {
+  margin-top: 25px;
+}
+
 .m-20 {
   margin: 20px;
 }
@@ -127,10 +131,17 @@ h6 {
       margin-bottom: 12px;
     }
   }
+
+  .description-show {
+    .ant-descriptions-item-label {
+      width: 35%;
+    }
+  }
 }
 .ant-form-item-label {
   padding: 0 !important;
 }
+
 .ant-input, .ant-input-affix-wrapper, .ant-picker, .ant-dropdown-menu, .ant-btn, .ant-card {
   border-radius: 2px !important;
 }
@@ -138,4 +149,11 @@ h6 {
   .ant-table-cell {
     padding: 5px !important;
   }
+}
+
+.ant-descriptions-header {
+  margin-bottom: 10px !important;
+}
+.ant-descriptions-view {
+  border-radius: 2px !important;
 }
