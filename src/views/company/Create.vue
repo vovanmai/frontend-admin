@@ -16,7 +16,6 @@
         :current="state.currentStep"
         :items="state.steps"
         type="navigation1"
-        :status="!state.stepStatusValidate ? 'error' : 'process'"
         style="max-width: 1000px"
         @change="changeStepOnStep"
       ></a-steps>
@@ -26,6 +25,7 @@
       style="margin-top: 25px"
       v-if="state.currentStep === 0"
       :form="state.form.company_basic"
+      :error="state.error"
       @validate-success="validateSuccess"
       @changeStep="changeStep"
     />
@@ -34,6 +34,7 @@
       style="margin-top: 25px"
       v-if="state.currentStep === 1"
       :form="state.form.company_setting"
+      :error="state.error"
       @validate-success="validateSuccess"
       @change-step="changeStep"
     />
@@ -49,7 +50,8 @@
       style="margin-top: 25px"
       v-if="state.currentStep === 3"
       :data="state.form"
-      @submit="handleCreateCompany"
+      @change-step="changeStep"
+      @submit="onCreateCompany"
     />
   </a-card>
 </template>
@@ -100,8 +102,13 @@ const state = reactive({
   ],
   form: {
     company_basic: {
-      code: '',
       name: '',
+      code: '',
+      representative: '',
+      phone: '',
+      email: '',
+      tax_code: '',
+      address: '',
     },
     company_setting: {
       service_type: ''
@@ -111,19 +118,8 @@ const state = reactive({
       email: '',
     },
   },
-  rules: {
-    code: [
-      { required: true, message: 'Không được rỗng.' }
-    ],
-    name: [
-      { required: true, message: 'Không được rỗng.' }
-    ]
-  }
+  error: {}
 })
-const onFinish = values => {
-};
-const onFinishFailed = errorInfo => {
-};
 const changeStep = (step) => {
   state.currentStep = step
 
@@ -145,12 +141,15 @@ const changeStepOnStep = async (step) => {
 };
 
 const validateSuccess = (step) => {
-  console.log(step)
   state.steps[step].disabled = false
 };
 
-const handleCreateCompany = () => {
-  console.log('handleCreateCompany')
-}
+const onCreateCompany = () => {
+  const stepError = 0
+  state.currentStep = stepError
+  state.error = {
+    code: 'Code bị trùng'
+  }
+};
 </script>
 <style></style>

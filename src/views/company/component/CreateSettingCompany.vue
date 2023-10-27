@@ -18,7 +18,7 @@
     </a-form-item>
     <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
       <a-space>
-        <a-button @click="goToPreviousStep">Trở lại</a-button>
+        <a-button @click="goToPreviousStep"><LeftOutlined /></a-button>
         <a-button type="primary" html-type="submit">Tiếp tục</a-button>
       </a-space>
     </a-form-item>
@@ -38,6 +38,7 @@ import {
   PlusCircleOutlined,
   UnorderedListOutlined,
   PlusOutlined,
+  LeftOutlined,
 } from '@ant-design/icons-vue'
 import {onMounted, reactive, ref} from 'vue'
 const refForm = ref(null)
@@ -49,7 +50,11 @@ const props = defineProps({
   form: {
     type: Object,
     required: true
-  }
+  },
+  error: {
+    type: Object,
+    required: true
+  },
 })
 
 const emit = defineEmits(['validateSuccess', 'changeStep'])

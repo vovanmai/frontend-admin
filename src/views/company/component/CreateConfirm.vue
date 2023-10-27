@@ -9,6 +9,10 @@
       >
         <a-descriptions-item label="Tên">{{ data.company_basic.name }}</a-descriptions-item>
         <a-descriptions-item label="Mã code">{{ data.company_basic.code }}</a-descriptions-item>
+        <a-descriptions-item label="Người đại diện">{{ data.company_basic.representative }}</a-descriptions-item>
+        <a-descriptions-item label="Địa chỉ email">{{ data.company_basic.email }}</a-descriptions-item>
+        <a-descriptions-item label="Số điện thoại">{{ data.company_basic.phone }}</a-descriptions-item>
+        <a-descriptions-item label="Địa chỉ">{{ data.company_basic.address }}</a-descriptions-item>
       </a-descriptions>
     </div>
 
@@ -34,6 +38,13 @@
         <a-descriptions-item label="Email">{{ data.company_admin.email }}</a-descriptions-item>
       </a-descriptions>
     </div>
+    <div class="d-flex justify-content-center mt-25">
+      <a-space>
+        <a-button @click="goToPreviousStep"><LeftOutlined /></a-button>
+        <a-button type="primary" @click="onsubmit">
+          <PlusOutlined/>Tạo</a-button>
+      </a-space>
+    </div>
   </div>
 </template>
 <script setup>
@@ -41,14 +52,18 @@ import Breadcrumb from '@/components/Breadcrumb.vue'
 import {
   Descriptions as ADescriptions,
   DescriptionsItem as ADescriptionsItem,
+  Space as ASpace,
+  Button as AButton,
 } from 'ant-design-vue'
 import {
   PlusCircleOutlined,
   UnorderedListOutlined,
   PlusOutlined,
+  LeftOutlined,
 } from '@ant-design/icons-vue'
 import { reactive } from 'vue'
-
+const emit = defineEmits(['changeStep', 'submit'])
+const previousStep = 2
 const props = defineProps({
   data: {
     type: Object,
@@ -56,11 +71,16 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['submit'])
-
 const state = reactive({
 
 })
 
+const goToPreviousStep = async () => {
+  emit('changeStep', previousStep)
+};
+
+const onsubmit = () => {
+  emit('submit')
+}
 </script>
 <style></style>

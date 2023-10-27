@@ -10,20 +10,59 @@
   >
     <a-form-item
       has-feedback
+      label="Tên công ty"
+      name="name"
+      :rules="state.rules.name"
+    >
+      <a-input ref="refInput" v-model:value="form.name" />
+    </a-form-item>
+{{state.isCodeError}}
+    <a-form-item
+      has-feedback
       label="Mã code"
       name="code"
+      :validateFirst="true"
       :rules="state.rules.code"
+      :help="state.isCodeError ? error.code : ''"
+      :validate-status="state.isCodeError ? 'error' : ''"
     >
-      <a-input v-model:value="form.code" ref="refInputCode" />
+      <a-input v-model:value="form.code" @input="enterCode" />
     </a-form-item>
 
     <a-form-item
       has-feedback
-      label="Tên"
-      name="name"
-      :rules="state.rules.name"
+      label="Người đại diện"
+      name="representative"
+      :rules="state.rules.representative"
     >
-      <a-input v-model:value="form.name" />
+      <a-input v-model:value="form.representative" />
+    </a-form-item>
+
+    <a-form-item
+      has-feedback
+      label="Địa chỉ email"
+      name="email"
+      :rules="state.rules.email"
+    >
+      <a-input v-model:value="form.email" />
+    </a-form-item>
+
+    <a-form-item
+      has-feedback
+      label="Số điện thoại"
+      name="phone"
+      :rules="state.rules.phone"
+    >
+      <a-input v-model:value="form.phone" />
+    </a-form-item>
+
+    <a-form-item
+      has-feedback
+      label="Địa chỉ"
+      name="address"
+      :rules="state.rules.address"
+    >
+      <a-input v-model:value="form.address" />
     </a-form-item>
 
     <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
@@ -34,6 +73,7 @@
   </a-form>
 </template>
 <script setup>
+import { findIndex } from 'lodash'
 import Breadcrumb from '@/components/Breadcrumb.vue'
 import {
   Space as ASpace,
@@ -51,15 +91,19 @@ import {
 import { reactive, ref, onMounted } from 'vue'
 const refForm = ref(null)
 
-const refInputCode = ref(null)
+const refInput = ref(null)
 onMounted(() => {
-  refInputCode.value.focus()
+  refInput.value.focus()
 })
 const props = defineProps({
   form: {
     type: Object,
     required: true
-  }
+  },
+  error: {
+    type: Object,
+    required: true
+  },
 })
 
 const emit = defineEmits(['validateSuccess', 'changeStep'])
@@ -70,18 +114,34 @@ const nextStep = 1
 const state = reactive({
   rules: {
     code: [
-      { required: true, message: 'Không được rỗng.' }
+      { required: true, message: 'Không được rỗng.' },
+      { max: 50, message: 'Không được lớn hơn 50 ký tự.'},
     ],
     name: [
       { required: true, message: 'Không được rỗng.' }
-    ]
-  }
+    ],
+    representative: [
+      { required: true, message: 'Không được rỗng.' }
+    ],
+    email: [
+      { required: true, message: 'Không được rỗng.' }
+    ],
+    phone: [
+      { required: true, message: 'Không được rỗng.' }
+    ],
+    address: [
+      { required: true, message: 'Không được rỗng.' }
+    ],
+  },
+  isCodeError: false,
 })
 const onFinish = values => {
   emit('validateSuccess', step)
   emit('changeStep', nextStep)
 };
-const onFinishFailed = errorInfo => {
+const onFinishFailed = async (error) => {
+  const index = findIndex(error.errorFields, function(item) { return item.name[0] == 'code' })
+  state.isCodeError = index >= 0
 };
 
 const validateForm = async () => {
@@ -92,8 +152,21 @@ const validateForm = async () => {
     return false
   }
 };
+const validateField = async (field) => {
+  try {
+    await refForm.value.validateFields([field])
+    return true
+  } catch (error) {
+    return false
+  }
+};
+
+const enterCode = async () => {
+  state.isCodeError = !await validateField('code')
+};
 defineExpose({
   validateForm,
 })
+state.isCodeError = !!props.error.code
 </script>
 <style></style>

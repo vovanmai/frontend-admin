@@ -328,7 +328,6 @@ const onFinish = values => {
   router.push({name: 'company.list', query: query})
 };
 const onFinishFailed = errorInfo => {
-  console.log('Failed:', errorInfo);
 };
 const resetForm = () => {
   state.loading = false
