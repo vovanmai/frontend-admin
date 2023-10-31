@@ -72,7 +72,6 @@ const props = defineProps({
 })
 
 const state = reactive({
-
 })
 
 const goToPreviousStep = async () => {

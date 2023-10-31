@@ -1,31 +1,39 @@
 <template>
-  <a-form
-    ref="refForm"
-    :model="form"
-    :label-col="{ span: 8 }"
-    :wrapper-col="{ span: 9 }"
-    autocomplete="off"
-    @finish="onFinish"
-    @finishFailed="onFinishFailed"
-  >
-    <a-form-item
-      has-feedback
-      label="Loại dịch vụ"
-      name="service_type"
-      :rules="state.rules.service_type"
+  <div>
+    <a-row>
+      <a-col :xs="{ span: 24, offset: 0 }" :md="{ span: 9, offset: 8 }">
+        <AlertErrorMessage></AlertErrorMessage>
+      </a-col>
+    </a-row>
+    <a-form
+      ref="refForm"
+      :model="form"
+      :label-col="{ span: 8 }"
+      :wrapper-col="{ span: 9 }"
+      autocomplete="off"
+      @finish="onFinish"
+      @finishFailed="onFinishFailed"
     >
-      <a-input ref="refServiceType" v-model:value="form.service_type" />
-    </a-form-item>
-    <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-      <a-space>
-        <a-button @click="goToPreviousStep"><LeftOutlined /></a-button>
-        <a-button type="primary" html-type="submit">Tiếp tục</a-button>
-      </a-space>
-    </a-form-item>
-  </a-form>
+      <a-form-item
+        has-feedback
+        label="Loại dịch vụ"
+        name="service_type"
+        :rules="state.rules.service_type"
+      >
+        <a-input ref="refServiceType" v-model:value="form.service_type" />
+      </a-form-item>
+      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
+        <a-space>
+          <a-button @click="goToPreviousStep"><LeftOutlined /></a-button>
+          <a-button type="primary" html-type="submit">Tiếp tục</a-button>
+        </a-space>
+      </a-form-item>
+    </a-form>
+  </div>
 </template>
 <script setup>
 import Breadcrumb from '@/components/Breadcrumb.vue'
+import AlertErrorMessage from '@/components/AlertErrorMessage.vue'
 import {
   Card as ACard,
   Space as ASpace,
@@ -33,6 +41,8 @@ import {
   Form as AForm,
   FormItem as AFormItem,
   Input as AInput,
+  Row as ARow,
+  Col as ACol,
 } from 'ant-design-vue'
 import {
   PlusCircleOutlined,

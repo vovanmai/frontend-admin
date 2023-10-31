@@ -22,7 +22,6 @@
     </div>
     <CreateBasicCompany
       ref="basicCompanyRef"
-      style="margin-top: 25px"
       v-if="state.currentStep === 0"
       :form="state.form.company_basic"
       :error="state.error"
@@ -31,7 +30,6 @@
     />
     <CreateSettingCompany
       ref="settingCompanyRef"
-      style="margin-top: 25px"
       v-if="state.currentStep === 1"
       :form="state.form.company_setting"
       :error="state.error"
@@ -40,14 +38,13 @@
     />
     <CreateAdmin
       ref="adminCompanyRef"
-      style="margin-top: 25px"
       v-if="state.currentStep === 2"
       :form="state.form.company_admin"
       @validate-success="validateSuccess"
       @change-step="changeStep"
     />
     <CreateConfirm
-      style="margin-top: 25px"
+      style="margin-bottom: 25px"
       v-if="state.currentStep === 3"
       :data="state.form"
       @change-step="changeStep"
@@ -130,10 +127,10 @@ const changeStep = (step) => {
 
 const changeStepOnStep = async (step) => {
   if (
-      (state.currentStep === 0 && await basicCompanyRef.value.validateForm())
-      || (state.currentStep === 1 && await settingCompanyRef.value.validateForm())
-      || (state.currentStep === 2 && await adminCompanyRef.value.validateForm())
-      || state.currentStep === 3
+    (state.currentStep === 0 && await basicCompanyRef.value.validateForm())
+    || (state.currentStep === 1 && await settingCompanyRef.value.validateForm())
+    || (state.currentStep === 2 && await adminCompanyRef.value.validateForm())
+    || state.currentStep === 3
   ) {
     state.steps[state.currentStep].disabled = false
     state.currentStep = step
@@ -143,13 +140,11 @@ const changeStepOnStep = async (step) => {
 const validateSuccess = (step) => {
   state.steps[step].disabled = false
 };
-
+import { useAppStore } from '@/stores/app'
+const app = useAppStore()
 const onCreateCompany = () => {
   const stepError = 0
   state.currentStep = stepError
-  state.error = {
-    code: 'Code bị trùng'
-  }
 };
 </script>
 <style></style>

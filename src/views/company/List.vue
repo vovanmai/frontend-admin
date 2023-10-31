@@ -188,8 +188,9 @@ import Breadcrumb from '@/components/Breadcrumb.vue'
 import { useRouter } from "vue-router";
 const router = useRouter()
 import { useAppStore } from '@/stores/app'
+import companyRequest from '@/http/requests/Company'
 const app = useAppStore()
-import { isEmpty, pickBy } from 'lodash';
+import { isEmpty, pickBy, get } from 'lodash';
 import {
   Row as ARow,
   Col as ACol,
@@ -239,71 +240,17 @@ const state = reactive({
     address: '',
     start_date: '',
   },
-  companyList: [
-    {
-      key: '1',
-      code: 'code1',
-      name: 'name1',
-      email: 'email1',
-      created_at: '2023-10-12 07:10:58',
-    },
-    {
-      key: '2',
-      code: 'code2',
-      name: 'name2',
-      email: 'email2',
-      created_at: '2023-10-24 07:50:58',
-    },{
-      key: '1',
-      code: 'code1',
-      name: 'name1',
-      email: 'email1',
-      created_at: '2023-10-12 07:10:58',
-    },
-    {
-      key: '2',
-      code: 'code2',
-      name: 'name2',
-      email: 'email2',
-      created_at: '2023-10-24 07:50:58',
-    },{
-      key: '1',
-      code: 'code1',
-      name: 'name1',
-      email: 'email1',
-      created_at: '2023-10-12 07:10:58',
-    },
-    {
-      key: '2',
-      code: 'code2',
-      name: 'name2',
-      email: 'email2',
-      created_at: '2023-10-24 07:50:58',
-    },{
-      key: '1',
-      code: 'code1',
-      name: 'name1',
-      email: 'email1',
-      created_at: '2023-10-12 07:10:58',
-    },
-    {
-      key: '2',
-      code: 'code2',
-      name: 'name2',
-      email: 'email2',
-      created_at: '2023-10-24 07:50:58',
-    },
-  ],
+  companyList: [],
   pagination: {
-    total: 5000,
+    total: null,
     current: 1,
-    pageSize: 10,
+    pageSize: 15,
     showTotal: (total, range) => `${range[0]}-${range[1]} của tổng ${total}`,
+    pageSizeOptions: ['15', '30', '50', '100']
   },
   selectedRowKeys: [],
   rules: {
     code: [
-      // { required: true },
       { max: 50, message: 'Tối đa là 50 ký tự.' },
     ],
     name: [
@@ -326,11 +273,11 @@ const onFinish = values => {
   state.loading = true
   const query = pickBy(state.formSearch, (value) => { return value !== '' })
   router.push({name: 'company.list', query: query})
+  getCompanies(values)
 };
 const onFinishFailed = errorInfo => {
 };
 const resetForm = () => {
-  state.loading = false
   router.push({name: 'company.list'})
   formRef.value.resetFields();
   state.formSearch.code = ''
@@ -341,6 +288,8 @@ const resetForm = () => {
   state.formSearch.representative = ''
   state.formSearch.address = ''
   state.formSearch.start_date = ''
+  state.pagination.pageSize = 15
+  getCompanies()
 };
 const columns = [
   {
@@ -382,13 +331,12 @@ const handleTableChange = (pagination, filters, sorter, extra) => {
     page: pagination.current,
   }
   if (!isEmpty(sorter) && sorter.order) {
-    params.sort_direction = sorter.order
     params.sort_column = sorter.field
+    params.sort_direction = sorter.order === 'ascend' ? 'asc' : 'desc'
   }
-
-  state.loading = true
-  // app.setLoading()
-  //Call api
+  params = pickBy(params, (value) => { return (value !== '' && value !== null && value !== undefined) })
+  router.push({name: 'company.list', query: params})
+  getCompanies(params)
 }
 const onSelectChange = selectedRowKeys => {
   state.selectedRowKeys = selectedRowKeys;
@@ -402,14 +350,12 @@ const showModalConfirm = () => {
     okType: 'danger',
     cancelText: 'Không',
     onOk() {
-      //Call api
-      console.log('call api')
     },
   });
 };
 const routerQuery = router.currentRoute.value.query
-state.pagination.current = routerQuery.page ?? 1
-state.pagination.pageSize = routerQuery.per_page ?? 10
+state.pagination.current = Number(routerQuery.page ?? 1)
+state.pagination.pageSize = Number(routerQuery.per_page ?? 15)
 state.formSearch.code = routerQuery.code ?? ''
 state.formSearch.name = routerQuery.name ?? ''
 state.formSearch.phone = routerQuery.phone ?? ''
@@ -418,6 +364,21 @@ state.formSearch.email = routerQuery.email ?? ''
 state.formSearch.representative = routerQuery.representative ?? ''
 state.formSearch.address = routerQuery.address ?? ''
 state.formSearch.start_date = routerQuery.start_date ?? ''
+
+const initData = (param) => {
+  getCompanies(param)
+}
+
+const getCompanies = async (param = {}) => {
+  state.loading = true
+  const response = await companyRequest.getCompanies(param);
+  state.loading = false
+  state.companyList = get(response, 'data.data', [])
+  state.pagination.total = get(response, 'data.total')
+}
+
+initData()
+
 </script>
 <style>
 

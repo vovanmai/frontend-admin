@@ -2,6 +2,18 @@ import List from '@/views/company/List.vue'
 import EmptyLayout from '@/components/layouts/EmptyLayout.vue'
 import Create from '@/views/company/Create.vue'
 import Edit from '@/views/company/Edit.vue'
+import {
+  SearchOutlined,
+  DownOutlined,
+  UpOutlined,
+  ClearOutlined,
+  UnorderedListOutlined,
+  PlusCircleOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  InfoCircleOutlined,
+  ExclamationCircleOutlined,
+} from '@ant-design/icons-vue'
 
 const routes = {
   path: '/companies',
@@ -46,7 +58,8 @@ const routes = {
           {
             name: 'Công ty/Cửa hàng',
             route: 'company.list',
-            icon: 'HomeOutlined'
+            icon: 'HomeOutlined',
+            icon1: SearchOutlined
           },
           {
             name: 'Tạo mới',

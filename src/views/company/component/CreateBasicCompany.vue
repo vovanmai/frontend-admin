@@ -1,80 +1,86 @@
 <template>
-  <a-form
-    :model="form"
-    ref="refForm"
-    :label-col="{ span: 8 }"
-    :wrapper-col="{ span: 9 }"
-    autocomplete="off"
-    @finish="onFinish"
-    @finishFailed="onFinishFailed"
-  >
-    <a-form-item
-      has-feedback
-      label="Tên công ty"
-      name="name"
-      :rules="state.rules.name"
+  <div>
+    <a-row>
+      <a-col :xs="{ span: 24, offset: 0 }" :md="{ span: 9, offset: 8 }">
+        <AlertErrorMessage></AlertErrorMessage>
+      </a-col>
+    </a-row>
+    <a-form
+      :model="form"
+      ref="refForm"
+      :label-col="{ span: 8 }"
+      :wrapper-col="{ span: 9 }"
+      autocomplete="off"
+      @finish="onFinish"
+      @finishFailed="onFinishFailed"
     >
-      <a-input ref="refInput" v-model:value="form.name" />
-    </a-form-item>
-{{state.isCodeError}}
-    <a-form-item
-      has-feedback
-      label="Mã code"
-      name="code"
-      :validateFirst="true"
-      :rules="state.rules.code"
-      :help="state.isCodeError ? error.code : ''"
-      :validate-status="state.isCodeError ? 'error' : ''"
-    >
-      <a-input v-model:value="form.code" @input="enterCode" />
-    </a-form-item>
+      <a-form-item
+        has-feedback
+        label="Tên công ty"
+        name="name"
+        :rules="state.rules.name"
+      >
+        <a-input ref="refInput" v-model:value="form.name" />
+      </a-form-item>
+      <a-form-item
+        has-feedback
+        label="Mã code"
+        name="code"
+        :validateFirst="true"
+        :rules="state.rules.code"
+      >
+        <a-input v-model:value="form.code" />
+      </a-form-item>
 
-    <a-form-item
-      has-feedback
-      label="Người đại diện"
-      name="representative"
-      :rules="state.rules.representative"
-    >
-      <a-input v-model:value="form.representative" />
-    </a-form-item>
+      <a-form-item
+          has-feedback
+          label="Người đại diện"
+          name="representative"
+          :rules="state.rules.representative"
+      >
+        <a-input v-model:value="form.representative" />
+      </a-form-item>
 
-    <a-form-item
-      has-feedback
-      label="Địa chỉ email"
-      name="email"
-      :rules="state.rules.email"
-    >
-      <a-input v-model:value="form.email" />
-    </a-form-item>
+      <a-form-item
+          has-feedback
+          label="Địa chỉ email"
+          name="email"
+          :rules="state.rules.email"
+      >
+        <a-input v-model:value="form.email" />
+      </a-form-item>
 
-    <a-form-item
-      has-feedback
-      label="Số điện thoại"
-      name="phone"
-      :rules="state.rules.phone"
-    >
-      <a-input v-model:value="form.phone" />
-    </a-form-item>
+      <a-form-item
+          has-feedback
+          label="Số điện thoại"
+          name="phone"
+          :rules="state.rules.phone"
+      >
+        <a-input v-model:value="form.phone" />
+      </a-form-item>
 
-    <a-form-item
-      has-feedback
-      label="Địa chỉ"
-      name="address"
-      :rules="state.rules.address"
-    >
-      <a-input v-model:value="form.address" />
-    </a-form-item>
+      <a-form-item
+          has-feedback
+          label="Địa chỉ"
+          name="address"
+          :rules="state.rules.address"
+      >
+        <a-input v-model:value="form.address" />
+      </a-form-item>
 
-    <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-      <a-space>
-        <a-button type="primary" html-type="submit">Tiếp tục</a-button>
-      </a-space>
-    </a-form-item>
-  </a-form>
+      <a-form-item :wrapper-col="{ offset: 8, span: 9 }">
+        <a-space>
+          <a-button type="primary" html-type="submit">Tiếp tục</a-button>
+        </a-space>
+      </a-form-item>
+    </a-form>
+  </div>
 </template>
 <script setup>
-import { findIndex } from 'lodash'
+import { findIndex, isEmpty, values } from 'lodash'
+
 import Breadcrumb from '@/components/Breadcrumb.vue'
+import AlertErrorMessage from '@/components/AlertErrorMessage.vue'
 import {
   Space as ASpace,
   Card as ACard,
@@ -82,6 +88,9 @@ import {
   Form as AForm,
   FormItem as AFormItem,
   Input as AInput,
+  Alert as AAlert,
+  Row as ARow,
+  Col as ACol,
 } from 'ant-design-vue'
 import {
   PlusCircleOutlined,
@@ -105,7 +114,6 @@ const props = defineProps({
     required: true
   },
 })
-
 const emit = defineEmits(['validateSuccess', 'changeStep'])
 
 const step = 0
@@ -143,7 +151,6 @@ const onFinishFailed = async (error) => {
   const index = findIndex(error.errorFields, function(item) { return item.name[0] == 'code' })
   state.isCodeError = index >= 0
 };
-
 const validateForm = async () => {
   try {
     await refForm.value.validateFields()
@@ -154,19 +161,13 @@ const validateForm = async () => {
 };
 const validateField = async (field) => {
   try {
-    await refForm.value.validateFields([field])
-    return true
+    return await refForm.value.validateFields([field])
   } catch (error) {
     return false
   }
 };
-
-const enterCode = async () => {
-  state.isCodeError = !await validateField('code')
-};
 defineExpose({
   validateForm,
 })
-state.isCodeError = !!props.error.code
 </script>
 <style></style>
