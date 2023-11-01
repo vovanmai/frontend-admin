@@ -1,4 +1,9 @@
 <template>
+  <a-row>
+    <a-col :xs="{ span: 24, offset: 0 }" :md="{ span: 9, offset: 8 }">
+      <AlertErrorMessage></AlertErrorMessage>
+    </a-col>
+  </a-row>
   <a-form
     :model="form"
     ref="refForm"
@@ -13,6 +18,7 @@
       label="Tên"
       name="name"
       :rules="state.rules.name"
+      :validateFirst="true"
     >
       <a-input ref="refInput" v-model:value="form.name" />
     </a-form-item>
@@ -21,8 +27,29 @@
       label="Email"
       name="email"
       :rules="state.rules.email"
+      :validateFirst="true"
     >
       <a-input v-model:value="form.email" />
+    </a-form-item>
+
+    <a-form-item
+      has-feedback
+      label="Mật khẩu"
+      name="password"
+      :rules="state.rules.password"
+      :validateFirst="true"
+    >
+      <a-input-password v-model:value="form.password" placeholder=""/>
+    </a-form-item>
+
+    <a-form-item
+      has-feedback
+      label="Xác nhận mật khẩu"
+      name="password_confirmation"
+      :rules="state.rules.password_confirmation"
+      :validateFirst="true"
+    >
+      <a-input-password v-model:value="form.password_confirmation" placeholder=""/>
     </a-form-item>
     <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
       <a-space>
@@ -40,7 +67,10 @@ import {
   Button as AButton,
   Form as AForm,
   FormItem as AFormItem,
+  InputPassword as AInputPassword,
   Input as AInput,
+  Col as ACol,
+  Row as ARow,
 } from 'ant-design-vue'
 import {
   PlusCircleOutlined,
@@ -48,6 +78,7 @@ import {
   PlusOutlined,
   LeftOutlined,
 } from '@ant-design/icons-vue'
+import AlertErrorMessage from '@/components/AlertErrorMessage.vue'
 import { onMounted, reactive, ref} from 'vue'
 const refForm = ref(null)
 const refInput = ref(null)
@@ -67,6 +98,34 @@ const nextStep = 3
 
 const emit = defineEmits(['validateSuccess', 'changeStep'])
 
+const validatePass = async (_rule, value) => {
+  if (value === '') {
+    return Promise.reject('Không được rỗng.');
+  } else {
+    if (value.length < 6) {
+      return Promise.reject('Tối thiểu 6 ký tự.');
+    }
+    if (props.form.password_confirmation !== '') {
+      refForm.value.validateFields('password_confirmation')
+    }
+    return Promise.resolve();
+  }
+};
+
+const validatePassConfirm = async (_rule, value) => {
+  if (value === '') {
+    return Promise.reject('Không được rỗng.')
+  } else {
+    if (value.length < 6) {
+      return Promise.reject('Tối thiểu 6 ký tự.');
+    }
+    if (value !== props.form.password) {
+      return Promise.reject("Mật khẩu không khớp.");
+    }
+    return Promise.resolve();
+  }
+};
+
 const state = reactive({
   rules: {
     name: [
@@ -75,8 +134,15 @@ const state = reactive({
     email: [
       { required: true, message: 'Không được rỗng.' }
     ],
+    password: [
+      { validator: validatePass },
+    ],
+    password_confirmation: [
+      { validator: validatePassConfirm },
+    ],
   }
 })
+
 const onFinish = values => {
   emit('validateSuccess', step)
   emit('changeStep', nextStep)

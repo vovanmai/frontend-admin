@@ -71,6 +71,13 @@ import {
   UnorderedListOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue'
+import { get } from 'lodash'
+import { useAppStore } from '@/stores/app'
+const appStore = useAppStore()
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+import CompanyRequest from "@/http/requests/Company";
 import { reactive, ref } from 'vue'
 const basicCompanyRef = ref(null)
 const settingCompanyRef = ref(null)
@@ -113,6 +120,8 @@ const state = reactive({
     company_admin: {
       name: '',
       email: '',
+      password: '',
+      password_confirmation: '',
     },
   },
   error: {}
@@ -140,11 +149,20 @@ const changeStepOnStep = async (step) => {
 const validateSuccess = (step) => {
   state.steps[step].disabled = false
 };
-import { useAppStore } from '@/stores/app'
-const app = useAppStore()
-const onCreateCompany = () => {
-  const stepError = 0
-  state.currentStep = stepError
+
+const onCreateCompany = async () => {
+  try {
+    appStore.setLoading()
+    await CompanyRequest.createCompany(state.form)
+    appStore.setLoading(false)
+    router.push({ name: 'company.list'})
+  } catch (error) {
+    if (get(error, 'status_code') === 422) {
+      state.currentStep = error.errors.step
+      appStore.setError(error.errors.details)
+    }
+  }
+
 };
 </script>
 <style></style>

@@ -19,6 +19,7 @@
         label="Tên công ty"
         name="name"
         :rules="state.rules.name"
+        :validateFirst="true"
       >
         <a-input ref="refInput" v-model:value="form.name" />
       </a-form-item>
@@ -124,6 +125,7 @@ const state = reactive({
     code: [
       { required: true, message: 'Không được rỗng.' },
       { max: 50, message: 'Không được lớn hơn 50 ký tự.'},
+      { pattern: '^[a-zA-Z0-9-_]+$', message: 'Chỉ được phép nhập những ký tự a-zA-Z0-9-_' },
     ],
     name: [
       { required: true, message: 'Không được rỗng.' }

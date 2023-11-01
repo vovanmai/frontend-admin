@@ -14,13 +14,19 @@
       @finish="onFinish"
       @finishFailed="onFinishFailed"
     >
+
       <a-form-item
         has-feedback
         label="Loại dịch vụ"
         name="service_type"
         :rules="state.rules.service_type"
       >
-        <a-input ref="refServiceType" v-model:value="form.service_type" />
+        <a-select
+          ref="refServiceType"
+          v-model:value="form.service_type"
+        >
+          <a-select-option value="1">Nail</a-select-option>
+        </a-select>
       </a-form-item>
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
         <a-space>
@@ -42,6 +48,8 @@ import {
   FormItem as AFormItem,
   Input as AInput,
   Row as ARow,
+  Select as ASelect,
+  SelectOption as ASelectOption,
   Col as ACol,
 } from 'ant-design-vue'
 import {
@@ -76,7 +84,7 @@ const nextStep = 2
 const state = reactive({
   rules: {
     service_type: [
-      { required: true, message: 'Không được rỗng.' }
+      { required: true, message: 'Vui lòng chọn' }
     ],
   },
   validatedForm: false,
@@ -108,4 +116,6 @@ defineExpose({
   validateForm,
 })
 </script>
-<style></style>
+<style>
+
+</style>

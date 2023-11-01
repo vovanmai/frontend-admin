@@ -20,8 +20,11 @@ export default class Http {
 
   requestInterceptor () {
     this.api.interceptors.request.use(async (config) => {
-      const { method } = config
-      return config
+      const token = localStorage.getItem('access_token');
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
+      return config;
     }, (error) => {
       return Promise.reject(error)
     })
@@ -33,6 +36,9 @@ export default class Http {
     }, (error) => {
       const status = error.response.status
       switch (status) {
+        case 401:
+          router.push({ name: 'auth.login' })
+          return
         case 403:
           router.push({ name: 'error.403' })
           return
@@ -79,8 +85,11 @@ export default class Http {
   }
 
   post (path = '', data, params = {}, headers = this.getHeaders(), config = {}) {
-    return this.api.post(this.getPath(path), data, { params: params, headers, ...config })
-  }
+    return this.api.post(
+      this.getPath(path),
+      data,
+{ params: params, headers, ...config })
+    }
 
   postForm(path = '', data, params = {}, headers = this.getHeaders(), config = {}) {
     return this.api.postForm(this.getPath(path), data, { params: params, headers, ...config })

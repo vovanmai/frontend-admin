@@ -10,7 +10,7 @@ class Company extends Http {
     return this.get('', params)
   }
 
-  create (data, params = {}) {
+  createCompany (data, params = {}) {
     return this.post('', data, params)
   }
 }
