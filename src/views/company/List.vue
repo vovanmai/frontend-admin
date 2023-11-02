@@ -53,7 +53,7 @@
             name="representative"
             label="Người đại diện"
           >
-            <a-input placeholder="" />
+            <a-input v-model:value="state.formSearch.representative" placeholder="" />
           </a-form-item>
         </a-col>
         <a-col v-show="state.isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
@@ -61,7 +61,7 @@
             name="phone"
             label="Số điện thoại"
           >
-            <a-input placeholder="" />
+            <a-input v-model:value="state.formSearch.phone" placeholder="" />
           </a-form-item>
         </a-col>
         <a-col v-show="state.isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
@@ -69,7 +69,7 @@
             name="address"
             label="Địa chỉ"
           >
-            <a-input placeholder="" />
+            <a-input v-model:value="state.formSearch.address" placeholder="" />
           </a-form-item>
         </a-col>
         <a-col v-show="state.isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
@@ -164,8 +164,10 @@
             <template #overlay>
               <a-menu>
                 <a-menu-item>
-                  <EditOutlined />
-                  <span class="ml-5">Chỉnh sửa</span>
+                  <router-link :to="{ name: 'company.edit', params: { id: record.id }}">
+                    <EditOutlined />
+                    <span class="ml-5">Chỉnh sửa</span>
+                  </router-link>
                 </a-menu-item>
                 <a-menu-item>
                   <InfoCircleOutlined />
@@ -270,10 +272,13 @@ const showMore = () => {
   }
 }
 const onFinish = values => {
+  if (state.loading) {
+    return
+  }
   state.loading = true
-  const query = pickBy(state.formSearch, (value) => { return value !== '' })
-  router.push({name: 'company.list', query: query})
-  getCompanies(values)
+  const dataSearch = pickBy(state.formSearch, (value) => { return value !== '' })
+  router.push({name: 'company.list', query: dataSearch})
+  getCompanies(dataSearch)
 };
 const onFinishFailed = errorInfo => {
 };
@@ -296,28 +301,35 @@ const columns = [
     title: 'Mã code',
     dataIndex: 'code',
     sorter: true,
-    width: '20%',
   },
   {
     title: 'Tên',
     dataIndex: 'name',
-    width: '20%',
+  },
+  {
+    title: 'Người đại diện',
+    dataIndex: 'representative',
   },
   {
     title: 'Địa chỉ email',
     dataIndex: 'email',
-    width: '20%',
+  },
+  {
+    title: 'Số điện thoại',
+    dataIndex: 'phone',
+  },
+  {
+    title: 'Mã số thuế',
+    dataIndex: 'tax_code',
   },
   {
     title: 'Ngày tạo',
     dataIndex: 'created_at',
-    width: '20%',
     sorter: true,
   },
   {
     title: 'Hành động',
     key: 'action',
-    width: '20%',
   },
 ];
 const handleTableChange = (pagination, filters, sorter, extra) => {
@@ -365,19 +377,25 @@ state.formSearch.representative = routerQuery.representative ?? ''
 state.formSearch.address = routerQuery.address ?? ''
 state.formSearch.start_date = routerQuery.start_date ?? ''
 
-const initData = (param) => {
-  getCompanies(param)
+const initData = () => {
+  getCompanies()
 }
 
-const getCompanies = async (param = {}) => {
+const getCompanies = async () => {
   state.loading = true
-  const response = await companyRequest.getCompanies(param);
+  const response = await companyRequest.list(state.formSearch);
   state.loading = false
   state.companyList = get(response, 'data.data', [])
   state.pagination.total = get(response, 'data.total')
 }
 
 initData()
+
+document.addEventListener('visibilitychange', function (event) {
+  if (!document.hidden) {
+    initData()
+  }
+});
 
 </script>
 <style>

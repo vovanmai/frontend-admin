@@ -6,12 +6,20 @@ class Company extends Http {
     this.prefix = '/api/admin/companies'
   }
 
-  getCompanies (params = {}) {
+  detail (id) {
+    return this.get(`/${id}`)
+  }
+
+  list (params) {
     return this.get('', params)
   }
 
-  createCompany (data, params = {}) {
-    return this.post('', data, params)
+  create (data) {
+    return this.post('', data)
+  }
+
+  update (id, data) {
+    return this.put(`/${id}`, data)
   }
 }
 

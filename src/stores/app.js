@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia'
+import error from "../router/main/error";
 
 export const useAppStore = defineStore('app', {
   state: () => ({
     isLoading: false,
     appName: 'Mana4.0',
     appShortName: 'M4.0',
-    errors: {}
+    errors: {},
+    errorTimeout: null
   }),
   getters: {},
   actions: {
@@ -14,7 +16,11 @@ export const useAppStore = defineStore('app', {
     },
     setError(value) {
       this.errors = value
-      setTimeout(() => {
+      if (this.errorTimeout) {
+        clearTimeout(this.errorTimeout)
+        this.errorTimeout = null
+      }
+      this.errorTimeout = setTimeout(() => {
         this.errors = {}
       }, 5000)
     }

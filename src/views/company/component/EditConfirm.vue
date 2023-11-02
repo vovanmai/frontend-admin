@@ -43,7 +43,7 @@
       <a-space>
         <a-button @click="goToPreviousStep"><LeftOutlined /></a-button>
         <a-button type="primary" @click="onsubmit">
-          <PlusOutlined/>Tạo</a-button>
+          <EditOutlined/>Chỉnh sửa</a-button>
       </a-space>
     </div>
   </div>
@@ -61,6 +61,7 @@ import {
   UnorderedListOutlined,
   PlusOutlined,
   LeftOutlined,
+  EditOutlined,
 } from '@ant-design/icons-vue'
 import { reactive } from 'vue'
 const emit = defineEmits(['changeStep', 'submit'])

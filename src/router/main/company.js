@@ -68,14 +68,26 @@ const routes = {
       }
     },
     {
-      path: 'edit',
+      path: ':id/edit',
       name: 'company.edit',
       component: Edit,
       meta: {
         name: 'Edit company',
         parentName: 'company',
+        title: 'Chỉnh sửa công ty/Cửa hàng',
+        breadcrumbs: [
+          {
+            name: 'Công ty/Cửa hàng',
+            route: 'company.list',
+            icon: 'HomeOutlined',
+            icon1: SearchOutlined
+          },
+          {
+            name: 'Chỉnh sửa',
+          }
+        ]
       }
-    }
+    },
   ]
 }
 

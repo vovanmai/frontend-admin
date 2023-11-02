@@ -99,31 +99,27 @@ const nextStep = 3
 const emit = defineEmits(['validateSuccess', 'changeStep'])
 
 const validatePass = async (_rule, value) => {
-  if (value === '') {
-    return Promise.reject('Không được rỗng.');
-  } else {
+  if (value !== '') {
     if (value.length < 6) {
       return Promise.reject('Tối thiểu 6 ký tự.');
     }
     if (props.form.password_confirmation !== '') {
       refForm.value.validateFields('password_confirmation')
     }
-    return Promise.resolve();
   }
+  return Promise.resolve();
 };
 
 const validatePassConfirm = async (_rule, value) => {
-  if (value === '') {
-    return Promise.reject('Không được rỗng.')
-  } else {
+  if (value !== '') {
     if (value.length < 6) {
       return Promise.reject('Tối thiểu 6 ký tự.');
     }
-    if (value !== props.form.password) {
+    if (props.form.password !== '' && value !== props.form.password) {
       return Promise.reject("Mật khẩu không khớp.");
     }
-    return Promise.resolve();
   }
+  return Promise.resolve();
 };
 
 const state = reactive({

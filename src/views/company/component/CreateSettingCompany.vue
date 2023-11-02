@@ -14,7 +14,6 @@
       @finish="onFinish"
       @finishFailed="onFinishFailed"
     >
-
       <a-form-item
         has-feedback
         label="Loại dịch vụ"
@@ -25,8 +24,19 @@
           ref="refServiceType"
           v-model:value="form.service_type"
         >
-          <a-select-option value="1">Nail</a-select-option>
+          <a-select-option value="" disabled>---Chọn---</a-select-option>
+          <a-select-option :value="1">Nail</a-select-option>
         </a-select>
+      </a-form-item>
+      <a-form-item
+        label="Khoảng thời gian sử dụng hợp "
+        name="contract_date"
+      >
+        <a-range-picker
+          class="w-100"
+          v-model:value="form.contract_date"
+          :placeholder="['Thời gian bắt đầu', 'Thời gian kết thúc']"
+        />
       </a-form-item>
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
         <a-space>
@@ -51,6 +61,7 @@ import {
   Select as ASelect,
   SelectOption as ASelectOption,
   Col as ACol,
+  RangePicker as ARangePicker,
 } from 'ant-design-vue'
 import {
   PlusCircleOutlined,

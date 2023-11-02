@@ -62,6 +62,15 @@
 
       <a-form-item
           has-feedback
+          label="Mã số thuế"
+          name="tax_code"
+          :rules="state.rules.tax_code"
+      >
+        <a-input v-model:value="form.tax_code" />
+      </a-form-item>
+
+      <a-form-item
+          has-feedback
           label="Địa chỉ"
           name="address"
           :rules="state.rules.address"
@@ -100,6 +109,7 @@ import {
 } from '@ant-design/icons-vue'
 import { reactive, ref, onMounted } from 'vue'
 const refForm = ref(null)
+import Constant from '@/constants/constant'
 
 const refInput = ref(null)
 onMounted(() => {
@@ -123,24 +133,33 @@ const nextStep = 1
 const state = reactive({
   rules: {
     code: [
-      { required: true, message: 'Không được rỗng.' },
       { max: 50, message: 'Không được lớn hơn 50 ký tự.'},
-      { pattern: '^[a-zA-Z0-9-_]+$', message: 'Chỉ được phép nhập những ký tự a-zA-Z0-9-_' },
+      { pattern: Constant.REGEX_CODE, message: 'Không đúng định dạng (bao gồm: a-zA-Z0-9-_)' },
     ],
     name: [
-      { required: true, message: 'Không được rỗng.' }
+      { required: true, message: 'Không được rỗng.' },
+      { max: 100, message: 'Không được lớn hơn 100 ký tự.'},
     ],
     representative: [
-      { required: true, message: 'Không được rỗng.' }
+      { required: true, message: 'Không được rỗng.' },
+      { max: 100, message: 'Không được lớn hơn 100 ký tự.'},
     ],
     email: [
-      { required: true, message: 'Không được rỗng.' }
+      { required: true, message: 'Không được rỗng.' },
+      { type: 'email', message: 'Địa chỉ email không hợp lệ.' },
+      { max: 100, message: 'Không được lớn hơn 100 ký tự.'},
     ],
     phone: [
-      { required: true, message: 'Không được rỗng.' }
+      { required: true, message: 'Không được rỗng.' },
+      { pattern: Constant.REGEX_PHONE, message: 'Số điện thoại không hợp lệ.' },
+    ],
+    tax_code: [
+      { required: true, message: 'Không được rỗng.' },
+      { pattern: Constant.REGEX_TAX_CODE, message: 'Mã số thuế không hợp lệ.' },
     ],
     address: [
-      { required: true, message: 'Không được rỗng.' }
+      { required: true, message: 'Không được rỗng.' },
+      { max: 255, message: 'Không được lớn hơn 255 ký tự.'},
     ],
   },
   isCodeError: false,

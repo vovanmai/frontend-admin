@@ -11,6 +11,7 @@
         ><UnorderedListOutlined />Danh sách</a-button>
       </router-link>
     </template>
+    {{ state.form }}
     <div class="d-flex justify-content-center" style="padding: 25px 0">
       <a-steps
         :current="state.currentStep"
@@ -71,7 +72,7 @@ import {
   UnorderedListOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue'
-import { get } from 'lodash'
+import { get, cloneDeep, clone } from 'lodash'
 import { useAppStore } from '@/stores/app'
 const appStore = useAppStore()
 import { useRouter } from 'vue-router'
@@ -95,7 +96,7 @@ const state = reactive({
       disabled: true,
     },
     {
-      title: 'Tạo quản trị viên',
+      title: 'Quản trị viên',
       description: 'Supper Admin',
       disabled: true,
     },
@@ -115,7 +116,9 @@ const state = reactive({
       address: '',
     },
     company_setting: {
-      service_type: ''
+      service_type: '',
+      contract_date: [
+      ],
     },
     company_admin: {
       name: '',
@@ -152,11 +155,20 @@ const validateSuccess = (step) => {
 
 const onCreateCompany = async () => {
   try {
+    const form = cloneDeep(state.form)
+    if (get(form, 'company_setting.contract_date.0')) {
+      form.company_setting.contract_start_date = get(form, 'company_setting.contract_date.0').format('YYYY-MM-DD')
+    }
+
+    if (get(form, 'company_setting.contract_date.1')) {
+      form.company_setting.contract_end_date = get(form, 'company_setting.contract_date.1').format('YYYY-MM-DD')
+    }
     appStore.setLoading()
-    await CompanyRequest.createCompany(state.form)
+    await CompanyRequest.create(form)
     appStore.setLoading(false)
     router.push({ name: 'company.list'})
   } catch (error) {
+    appStore.setLoading(false)
     if (get(error, 'status_code') === 422) {
       state.currentStep = error.errors.step
       appStore.setError(error.errors.details)
