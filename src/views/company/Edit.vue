@@ -53,6 +53,7 @@
   </a-card>
 </template>
 <script setup>
+import dayjs from 'dayjs'
 import Breadcrumb from '@/components/Breadcrumb.vue'
 import CreateBasicCompany from '@/views/company/component/CreateBasicCompany.vue'
 import CreateSettingCompany from '@/views/company/component/CreateSettingCompany.vue'
@@ -72,7 +73,7 @@ import {
   PlusOutlined,
   EditOutlined,
 } from '@ant-design/icons-vue'
-import { get } from 'lodash'
+import { cloneDeep, get } from 'lodash'
 import { useAppStore } from '@/stores/app'
 const appStore = useAppStore()
 import { useRouter } from 'vue-router'
@@ -116,7 +117,8 @@ const form = reactive({
     address: '',
   },
   company_setting: {
-    service_type: ''
+    service_type: '',
+    contract_date: [],
   },
   company_admin: {
     name: '',
@@ -153,7 +155,32 @@ const validateSuccess = (step) => {
 const onEditCompany = async () => {
   try {
     appStore.setLoading()
-    await CompanyRequest.update(router.currentRoute.value.params.id, form)
+    const formSubmit = cloneDeep(form)
+    if (get(formSubmit, 'company_setting.contract_date.0')) {
+      formSubmit.company_setting.contract_start_date = get(formSubmit, 'company_setting.contract_date.0').format('YYYY-MM-DD')
+    } else {
+      formSubmit.company_setting.contract_start_date = null
+    }
+
+    if (get(formSubmit, 'company_setting.contract_date.1')) {
+      formSubmit.company_setting.contract_end_date = get(formSubmit, 'company_setting.contract_date.1').format('YYYY-MM-DD')
+    } else {
+      formSubmit.company_setting.contract_end_date = null
+    }
+
+    if (get(formSubmit, 'company_setting.trial_date.0')) {
+      formSubmit.company_setting.trial_start_date = get(formSubmit, 'company_setting.trial_date.0').format('YYYY-MM-DD')
+    } else {
+      formSubmit.company_setting.trial_start_date = null
+    }
+
+    if (get(formSubmit, 'company_setting.contract_date.1')) {
+      formSubmit.company_setting.trial_end_date = get(formSubmit, 'company_setting.trial_date.1').format('YYYY-MM-DD')
+    } else {
+      formSubmit.company_setting.trial_end_date = null
+    }
+
+    await CompanyRequest.update(router.currentRoute.value.params.id, formSubmit)
     appStore.setLoading(false)
     router.push({ name: 'company.list'})
   } catch (error) {
@@ -176,13 +203,26 @@ const getCompanyDetail = async () => {
     form.company_basic.address = data.address
     form.company_basic.phone = data.phone
 
-    form.company_setting.service_type = data.setting.service_type
+    form.company_setting.service_type = get(data, 'setting.service_type', '')
+    const contractStartDate = get(data, 'setting.contract_start_date', '')
+    const contractEndDate = get(data, 'setting.contract_end_date', '')
+    form.company_setting.contract_date = [
+      contractStartDate ? dayjs(contractStartDate) : '',
+      contractEndDate ? dayjs(contractEndDate) : '',
+    ]
+
+    const trialStartDate = get(data, 'setting.trial_start_date', '')
+    const trialEndDate = get(data, 'setting.trial_end_date', '')
+    form.company_setting.trial_date = [
+      trialStartDate ? dayjs(trialStartDate) : '',
+      trialEndDate ? dayjs(trialEndDate) : '',
+    ]
+
     form.company_admin.name = data.super_admin.name
     form.company_admin.email = data.super_admin.email
   } catch (error) {
   }
 }
-
 getCompanyDetail()
 
 </script>

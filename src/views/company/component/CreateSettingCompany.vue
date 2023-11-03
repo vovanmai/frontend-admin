@@ -29,11 +29,30 @@
         </a-select>
       </a-form-item>
       <a-form-item
-        label="Khoảng thời gian sử dụng hợp "
-        name="contract_date"
+        has-feedback
+        label="Ngày dùng thử"
+        name="trial_date"
+        :rules="state.rules.trial_date"
       >
         <a-range-picker
           class="w-100"
+          :allow-empty="[false, false]"
+          :disabled-date="disabledDate"
+          :presets="rangePresets"
+          v-model:value="form.trial_date"
+          :placeholder="['Thời gian bắt đầu', 'Thời gian kết thúc']"
+        />
+      </a-form-item>
+      <a-form-item
+        has-feedback
+        label="Ngày sử dụng hợp đồng"
+        name="contract_date"
+        :rules="state.rules.contract_date"
+      >
+        <a-range-picker
+          class="w-100"
+          :presets="rangePresets"
+          :disabled-date="disabledDate"
           v-model:value="form.contract_date"
           :placeholder="['Thời gian bắt đầu', 'Thời gian kết thúc']"
         />
@@ -48,6 +67,9 @@
   </div>
 </template>
 <script setup>
+import dayjs from "dayjs";
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+dayjs.extend(isSameOrAfter)
 import Breadcrumb from '@/components/Breadcrumb.vue'
 import AlertErrorMessage from '@/components/AlertErrorMessage.vue'
 import {
@@ -92,10 +114,44 @@ const previousStep = 0
 const step = 1
 const nextStep = 2
 
+const validateTrialDate = async (_rule, value) => {
+  if (value && value.length > 0) {
+    if (!value[0].isSameOrAfter(dayjs(), 'day')) {
+      return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại.')
+    }
+  }
+
+  refForm.value.validateFields(['contract_date'])
+
+  return Promise.resolve();
+};
+
+const validateContractDate = async (_rule, value) => {
+  if (value && value.length > 0) {
+    if (!value[0].isSameOrAfter(dayjs(), 'day')) {
+      return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại.')
+    }
+
+    if (props.form.trial_date && props.form.trial_date.length > 0) {
+      const trialEndDate = props.form.trial_date[1]
+      if (!value[0].isAfter(trialEndDate, 'day')) {
+        return Promise.reject('Ngày bắt đầu hợp đồng phải lớn hơn ngày kết thúc dùng thử.')
+      }
+    }
+  }
+  return Promise.resolve();
+};
+
 const state = reactive({
   rules: {
     service_type: [
       { required: true, message: 'Vui lòng chọn' }
+    ],
+    contract_date: [
+      { validator: validateContractDate }
+    ],
+    trial_date: [
+      { validator: validateTrialDate }
     ],
   },
   validatedForm: false,
@@ -122,6 +178,33 @@ const goToPreviousStep = async () => {
 };
 const onFinishFailed = errorInfo => {
 };
+
+const changeContractDate = (dates) => {
+
+};
+
+const rangePresets = ref([
+  {
+    label: '7 ngày gần nhất',
+    value: [dayjs(), dayjs().add(6, 'd')],
+  },
+  {
+    label: 'Tới cuối tháng',
+    value: [dayjs(), dayjs().endOf('month')],
+  },
+  {
+    label: '30 ngày gần nhất',
+    value: [dayjs(), dayjs().add(29, 'd')],
+  },
+  {
+    label: '1 năm gần nhất',
+    value: [dayjs(), dayjs().add(365, 'd')],
+  },
+]);
+
+const disabledDate = (current) => {
+  return current && current.isBefore(dayjs(), 'day')
+}
 
 defineExpose({
   validateForm,

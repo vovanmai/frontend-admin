@@ -38,7 +38,7 @@ export default class Http {
       switch (status) {
         case 401:
           router.push({ name: 'auth.login' })
-          localStorage.removeItem('access_t')
+          localStorage.removeItem('access_token')
           return
         case 403:
           router.push({ name: 'error.403' })

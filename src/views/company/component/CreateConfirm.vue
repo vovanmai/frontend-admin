@@ -25,6 +25,10 @@
         style="width: 750px"
       >
         <a-descriptions-item label="Loại dịch vụ">{{ data.company_setting.service_type }}</a-descriptions-item>
+        <a-descriptions-item label="Ngày bắt đầu dùng thử">{{ trialStartDate }}</a-descriptions-item>
+        <a-descriptions-item label="Ngày kết thúc dùng thử">{{ trialEndDate }}</a-descriptions-item>
+        <a-descriptions-item label="Ngày bắt đầu hợp đồng">{{ contractStartDate }}</a-descriptions-item>
+        <a-descriptions-item label="Ngày kết thúc hợp đồng">{{ contractEndDate }}</a-descriptions-item>
       </a-descriptions>
     </div>
 
@@ -62,7 +66,8 @@ import {
   PlusOutlined,
   LeftOutlined,
 } from '@ant-design/icons-vue'
-import { reactive } from 'vue'
+import {computed, reactive} from 'vue'
+import {get} from "lodash";
 const emit = defineEmits(['changeStep', 'submit'])
 const previousStep = 2
 const props = defineProps({
@@ -82,5 +87,41 @@ const goToPreviousStep = async () => {
 const onsubmit = () => {
   emit('submit')
 }
+
+const contractStartDate = computed(() => {
+  let date = get(props.data, 'company_setting.contract_date.0', '')
+
+  if (date) {
+    date = date.format('YYYY-MM-DD')
+  }
+  return date
+})
+
+const contractEndDate = computed(() => {
+  let date = get(props.data, 'company_setting.contract_date.1', '')
+
+  if (date) {
+    date = date.format('YYYY-MM-DD')
+  }
+  return date
+})
+
+const trialStartDate = computed(() => {
+  let date = get(props.data, 'company_setting.trial_date.0', '')
+
+  if (date) {
+    date = date.format('YYYY-MM-DD')
+  }
+  return date
+})
+
+const trialEndDate = computed(() => {
+  let date = get(props.data, 'company_setting.trial_date.1', '')
+
+  if (date) {
+    date = date.format('YYYY-MM-DD')
+  }
+  return date
+})
 </script>
 <style></style>

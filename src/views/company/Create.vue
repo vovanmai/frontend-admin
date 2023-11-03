@@ -11,7 +11,6 @@
         ><UnorderedListOutlined />Danh sách</a-button>
       </router-link>
     </template>
-    {{ state.form }}
     <div class="d-flex justify-content-center" style="padding: 25px 0">
       <a-steps
         :current="state.currentStep"
@@ -117,8 +116,8 @@ const state = reactive({
     },
     company_setting: {
       service_type: '',
-      contract_date: [
-      ],
+      contract_date: [],
+      trial_date: [],
     },
     company_admin: {
       name: '',
@@ -163,6 +162,14 @@ const onCreateCompany = async () => {
     if (get(form, 'company_setting.contract_date.1')) {
       form.company_setting.contract_end_date = get(form, 'company_setting.contract_date.1').format('YYYY-MM-DD')
     }
+
+    if (get(form, 'company_setting.trial_date.0')) {
+      form.company_setting.trial_start_date = get(form, 'company_setting.trial_date.0').format('YYYY-MM-DD')
+    }
+
+    if (get(form, 'company_setting.contract_date.1')) {
+      form.company_setting.trial_end_date = get(form, 'company_setting.trial_date.1').format('YYYY-MM-DD')
+    }
     appStore.setLoading()
     await CompanyRequest.create(form)
     appStore.setLoading(false)
@@ -174,7 +181,6 @@ const onCreateCompany = async () => {
       appStore.setError(error.errors.details)
     }
   }
-
 };
 </script>
 <style></style>
