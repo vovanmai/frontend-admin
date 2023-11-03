@@ -346,6 +346,7 @@ const handleTableChange = (pagination, filters, sorter, extra) => {
     params.sort_column = sorter.field
     params.sort_direction = sorter.order === 'ascend' ? 'asc' : 'desc'
   }
+
   params = pickBy(params, (value) => { return (value !== '' && value !== null && value !== undefined) })
   router.push({name: 'company.list', query: params})
   getCompanies(params)
@@ -378,12 +379,13 @@ state.formSearch.address = routerQuery.address ?? ''
 state.formSearch.start_date = routerQuery.start_date ?? ''
 
 const initData = () => {
-  getCompanies()
+  const dataSearch = pickBy(state.formSearch, (value) => { return value !== '' })
+  getCompanies(dataSearch)
 }
 
-const getCompanies = async () => {
+const getCompanies = async (params) => {
   state.loading = true
-  const response = await companyRequest.list(state.formSearch);
+  const response = await companyRequest.list(params);
   state.loading = false
   state.companyList = get(response, 'data.data', [])
   state.pagination.total = get(response, 'data.total')
