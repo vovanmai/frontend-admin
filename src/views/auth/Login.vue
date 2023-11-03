@@ -42,9 +42,11 @@
 </template>
 <script setup>
 import { get } from 'lodash'
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router';
 import { showNotification } from '@/common/helper';
 const router = useRouter()
+import { useAuthStore } from '@/stores/auth'
+const authStore = useAuthStore()
 import {
   Card as ACard,
   Form as AForm,
@@ -75,6 +77,7 @@ const onFinish = async values => {
   try {
     const response = await AuthRequest.login(values)
     localStorage.setItem('access_token', get(response, 'data.access_token'))
+    authStore.setUser(get(response, 'data.user'))
     showNotification(get(response, 'message'), 'success')
     await router.push({ name: 'company.list' })
   } catch (error) {

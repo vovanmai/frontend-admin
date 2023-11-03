@@ -13,43 +13,53 @@
     </template>
     <div class="d-flex justify-content-center" style="padding: 25px 0">
       <a-steps
-          :current="state.currentStep"
-          :items="state.steps"
-          type="navigation1"
-          style="max-width: 1000px"
-          @change="changeStepOnStep"
-      ></a-steps>
+        :current="state.currentStep"
+        :items="state.steps"
+        type="navigation1"
+        style="max-width: 1000px"
+        @change="changeStepOnStep"
+      />
     </div>
-    <CreateBasicCompany
+    <Transition name="slide-fade">
+      <CreateBasicCompany
         ref="basicCompanyRef"
         v-if="state.currentStep === 0"
         :form="form.company_basic"
         :error="state.error"
         @validate-success="validateSuccess"
         @changeStep="changeStep"
-    />
-    <CreateSettingCompany
+      />
+    </Transition>
+    <Transition name="slide-fade">
+      <CreateSettingCompany
         ref="settingCompanyRef"
         v-if="state.currentStep === 1"
         :form="form.company_setting"
         :error="state.error"
         @validate-success="validateSuccess"
         @change-step="changeStep"
-    />
-    <EditAdmin
+      />
+    </Transition>
+
+    <Transition name="slide-fade">
+      <EditAdmin
         ref="adminCompanyRef"
         v-if="state.currentStep === 2"
         :form="form.company_admin"
         @validate-success="validateSuccess"
         @change-step="changeStep"
-    />
-    <EditConfirm
+      />
+    </Transition>
+
+    <Transition name="slide-fade">
+      <EditConfirm
         style="margin-bottom: 25px"
         v-if="state.currentStep === 3"
         :data="form"
         @change-step="changeStep"
         @submit="onEditCompany"
-    />
+      />
+    </Transition>
   </a-card>
 </template>
 <script setup>
@@ -226,4 +236,13 @@ const getCompanyDetail = async () => {
 getCompanyDetail()
 
 </script>
-<style></style>
+<style>
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-enter-from {
+  transform: translateX(20px);
+  opacity: 0;
+}
+</style>

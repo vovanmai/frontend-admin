@@ -6,8 +6,16 @@ class Company extends Http {
     this.prefix = '/api/admin/'
   }
 
-  login (data, params = {}) {
-    return this.post('login', data, params)
+  login (data) {
+    return this.post('login', data)
+  }
+
+  profile () {
+    return this.get('profile')
+  }
+
+  logout () {
+    return this.get('logout')
   }
 }
 

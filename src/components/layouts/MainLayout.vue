@@ -10,7 +10,8 @@
     </a-layout-sider>
     <a-layout :style="{ marginLeft: state.marginLeft, height: '100%' }">
       <a-layout-header
-        style="display: flex; align-items: center; background: #fff; padding: 0px 20px; height: 54px"
+        class="d-flex align-item-center justify-content-between"
+        style="background: #fff; padding: 0px 20px; height: 54px"
       >
         <menu-unfold-outlined
           v-if="state.collapsed"
@@ -22,6 +23,24 @@
           class="collapsed-trigger"
           @click="toggle()"
         />
+        <div>
+          <a-dropdown>
+            <a class="ant-dropdown-link" @click.prevent>
+              {{ get(authStore, 'currentUser.name') }}
+              <DownOutlined />
+            </a>
+            <template #overlay>
+              <a-menu>
+                <a-menu-item>
+                  <a-space>
+                    <LogoutOutlined />
+                    <span @click="logout">Đăng xuất</span>
+                  </a-space>
+                </a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
+        </div>
       </a-layout-header>
       <a-layout-content class="m-20">
         <router-view></router-view>
@@ -31,8 +50,10 @@
 </template>
 
 <script setup>
+import { get } from 'lodash'
 import {
   Menu as AMenu,
+  MenuItem as AMenuItem,
   Layout as ALayout,
   LayoutSider as ALayoutSider,
   LayoutHeader as ALayoutHeader,
@@ -40,21 +61,27 @@ import {
   Breadcrumb as ABreadcrumb,
   BreadcrumbItem as ABreadcrumbItem,
   Space as ASpace,
+  Dropdown as ADropdown,
 } from 'ant-design-vue'
 import { useAppStore } from '@/stores/app'
+const app = useAppStore()
 import Icon from '@/components/Icon.vue'
 import MenuItem from '@/components/MenuItem.vue'
-const app = useAppStore()
+import { showNotification } from '@/common/helper';
+
 import {
   OrderedListOutlined,
   HomeOutlined,
   UserOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  VideoCameraOutlined
+  VideoCameraOutlined,
+  DownOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons-vue'
+import AuthRequest from '@/http/requests/Auth'
 import { useAuthStore } from '@/stores/auth'
-const auth = useAuthStore()
+const authStore = useAuthStore()
 import mainRoutes from '../../router/main'
 import { ref, reactive, watch } from 'vue'
 import { useRoute, useRouter } from "vue-router";
@@ -104,6 +131,17 @@ watch(() => route.name, () => {
     state.openKeys = [router.currentRoute.value.meta.parentName]
   }
 });
+
+const logout = async () => {
+  try {
+    await AuthRequest.logout()
+    localStorage.removeItem('access_token')
+    showNotification('Đăng xuất thành công', 'success')
+    router.push({ name: 'auth.login'})
+  } catch (error) {
+
+  }
+}
 </script>
 
 <style scoped>

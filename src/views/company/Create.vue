@@ -20,36 +20,44 @@
         @change="changeStepOnStep"
       ></a-steps>
     </div>
-    <CreateBasicCompany
-      ref="basicCompanyRef"
-      v-if="state.currentStep === 0"
-      :form="state.form.company_basic"
-      :error="state.error"
-      @validate-success="validateSuccess"
-      @changeStep="changeStep"
-    />
-    <CreateSettingCompany
-      ref="settingCompanyRef"
-      v-if="state.currentStep === 1"
-      :form="state.form.company_setting"
-      :error="state.error"
-      @validate-success="validateSuccess"
-      @change-step="changeStep"
-    />
-    <CreateAdmin
-      ref="adminCompanyRef"
-      v-if="state.currentStep === 2"
-      :form="state.form.company_admin"
-      @validate-success="validateSuccess"
-      @change-step="changeStep"
-    />
-    <CreateConfirm
-      style="margin-bottom: 25px"
-      v-if="state.currentStep === 3"
-      :data="state.form"
-      @change-step="changeStep"
-      @submit="onCreateCompany"
-    />
+    <Transition name="slide-fade">
+      <CreateBasicCompany
+        ref="basicCompanyRef"
+        v-if="state.currentStep === 0"
+        :form="state.form.company_basic"
+        :error="state.error"
+        @validate-success="validateSuccess"
+        @changeStep="changeStep"
+      />
+    </Transition>
+    <Transition name="slide-fade">
+      <CreateSettingCompany
+        ref="settingCompanyRef"
+        v-if="state.currentStep === 1"
+        :form="state.form.company_setting"
+        :error="state.error"
+        @validate-success="validateSuccess"
+        @change-step="changeStep"
+      />
+    </Transition>
+    <Transition name="slide-fade">
+      <CreateAdmin
+        ref="adminCompanyRef"
+        v-if="state.currentStep === 2"
+        :form="state.form.company_admin"
+        @validate-success="validateSuccess"
+        @change-step="changeStep"
+      />
+    </Transition>
+    <Transition name="slide-fade">
+      <CreateConfirm
+        style="margin-bottom: 25px"
+        v-if="state.currentStep === 3"
+        :data="state.form"
+        @change-step="changeStep"
+        @submit="onCreateCompany"
+      />
+    </Transition>
   </a-card>
 </template>
 <script setup>
@@ -183,4 +191,5 @@ const onCreateCompany = async () => {
   }
 };
 </script>
-<style></style>
+<style>
+</style>

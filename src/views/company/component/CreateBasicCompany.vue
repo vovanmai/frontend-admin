@@ -34,46 +34,46 @@
       </a-form-item>
 
       <a-form-item
-          has-feedback
-          label="Người đại diện"
-          name="representative"
-          :rules="state.rules.representative"
+        has-feedback
+        label="Người đại diện"
+        name="representative"
+        :rules="state.rules.representative"
       >
         <a-input v-model:value="form.representative" />
       </a-form-item>
 
       <a-form-item
-          has-feedback
-          label="Địa chỉ email"
-          name="email"
-          :rules="state.rules.email"
+        has-feedback
+        label="Địa chỉ email"
+        name="email"
+        :rules="state.rules.email"
       >
         <a-input v-model:value="form.email" />
       </a-form-item>
 
       <a-form-item
-          has-feedback
-          label="Số điện thoại"
-          name="phone"
-          :rules="state.rules.phone"
+        has-feedback
+        label="Số điện thoại"
+        name="phone"
+        :rules="state.rules.phone"
       >
         <a-input v-model:value="form.phone" />
       </a-form-item>
 
       <a-form-item
-          has-feedback
-          label="Mã số thuế"
-          name="tax_code"
-          :rules="state.rules.tax_code"
+        has-feedback
+        label="Mã số thuế"
+        name="tax_code"
+        :rules="state.rules.tax_code"
       >
         <a-input v-model:value="form.tax_code" />
       </a-form-item>
 
       <a-form-item
-          has-feedback
-          label="Địa chỉ"
-          name="address"
-          :rules="state.rules.address"
+        has-feedback
+        label="Địa chỉ"
+        name="address"
+        :rules="state.rules.address"
       >
         <a-input v-model:value="form.address" />
       </a-form-item>

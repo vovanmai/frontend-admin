@@ -52,7 +52,7 @@
         <a-range-picker
           class="w-100"
           :presets="rangePresets"
-          :disabled-date="disabledDate"
+          :disabled-date="disabledContractDate"
           v-model:value="form.contract_date"
           :placeholder="['Thời gian bắt đầu', 'Thời gian kết thúc']"
         />
@@ -68,8 +68,6 @@
 </template>
 <script setup>
 import dayjs from "dayjs";
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
-dayjs.extend(isSameOrAfter)
 import Breadcrumb from '@/components/Breadcrumb.vue'
 import AlertErrorMessage from '@/components/AlertErrorMessage.vue'
 import {
@@ -204,6 +202,14 @@ const rangePresets = ref([
 
 const disabledDate = (current) => {
   return current && current.isBefore(dayjs(), 'day')
+}
+
+const disabledContractDate = (current) => {
+  if (props.form.trial_date && props.form.trial_date.length > 0) {
+    const trialEndDate = props.form.trial_date[1]
+    return current && current.isSameOrBefore(trialEndDate, 'day')
+  }
+  return current && current.isSameOrBefore(dayjs(), 'day')
 }
 
 defineExpose({

@@ -1,63 +1,65 @@
 <template>
-  <a-row>
-    <a-col :xs="{ span: 24, offset: 0 }" :md="{ span: 9, offset: 8 }">
-      <AlertErrorMessage></AlertErrorMessage>
-    </a-col>
-  </a-row>
-  <a-form
-    :model="form"
-    ref="refForm"
-    :label-col="{ span: 8 }"
-    :wrapper-col="{ span: 9 }"
-    autocomplete="off"
-    @finish="onFinish"
-    @finishFailed="onFinishFailed"
-  >
-    <a-form-item
-      has-feedback
-      label="Tên"
-      name="name"
-      :rules="state.rules.name"
-      :validateFirst="true"
+  <div>
+    <a-row>
+      <a-col :xs="{ span: 24, offset: 0 }" :md="{ span: 9, offset: 8 }">
+        <AlertErrorMessage></AlertErrorMessage>
+      </a-col>
+    </a-row>
+    <a-form
+      :model="form"
+      ref="refForm"
+      :label-col="{ span: 8 }"
+      :wrapper-col="{ span: 9 }"
+      autocomplete="off"
+      @finish="onFinish"
+      @finishFailed="onFinishFailed"
     >
-      <a-input ref="refInput" v-model:value="form.name" />
-    </a-form-item>
-    <a-form-item
-      has-feedback
-      label="Email"
-      name="email"
-      :rules="state.rules.email"
-      :validateFirst="true"
-    >
-      <a-input v-model:value="form.email" />
-    </a-form-item>
+      <a-form-item
+        has-feedback
+        label="Tên"
+        name="name"
+        :rules="state.rules.name"
+        :validateFirst="true"
+      >
+        <a-input ref="refInput" v-model:value="form.name" />
+      </a-form-item>
+      <a-form-item
+        has-feedback
+        label="Email"
+        name="email"
+        :rules="state.rules.email"
+        :validateFirst="true"
+      >
+        <a-input v-model:value="form.email" />
+      </a-form-item>
 
-    <a-form-item
-      has-feedback
-      label="Mật khẩu"
-      name="password"
-      :rules="state.rules.password"
-      :validateFirst="true"
-    >
-      <a-input-password v-model:value="form.password" placeholder=""/>
-    </a-form-item>
+      <a-form-item
+        has-feedback
+        label="Mật khẩu"
+        name="password"
+        :rules="state.rules.password"
+        :validateFirst="true"
+      >
+        <a-input-password v-model:value="form.password" placeholder=""/>
+      </a-form-item>
 
-    <a-form-item
-      has-feedback
-      label="Xác nhận mật khẩu"
-      name="password_confirmation"
-      :rules="state.rules.password_confirmation"
-      :validateFirst="true"
-    >
-      <a-input-password v-model:value="form.password_confirmation" placeholder=""/>
-    </a-form-item>
-    <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-      <a-space>
-        <a-button @click="goToPreviousStep"><LeftOutlined /></a-button>
-        <a-button type="primary" html-type="submit">Tiếp tục</a-button>
-      </a-space>
-    </a-form-item>
-  </a-form>
+      <a-form-item
+        has-feedback
+        label="Xác nhận mật khẩu"
+        name="password_confirmation"
+        :rules="state.rules.password_confirmation"
+        :validateFirst="true"
+      >
+        <a-input-password v-model:value="form.password_confirmation" placeholder=""/>
+      </a-form-item>
+      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
+        <a-space>
+          <a-button @click="goToPreviousStep"><LeftOutlined /></a-button>
+          <a-button type="primary" html-type="submit">Tiếp tục</a-button>
+        </a-space>
+      </a-form-item>
+    </a-form>
+  </div>
 </template>
 <script setup>
 import Breadcrumb from '@/components/Breadcrumb.vue'
