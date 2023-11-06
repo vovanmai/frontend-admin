@@ -21,7 +21,19 @@ export const rangePresets = () => {
     },
     {
       label: '7 ngày gần nhất',
-      value: [dayjs().add(-6, 'd'), dayjs()],
+      value: [dayjs().add(-6, 'day'), dayjs()],
+    },
+    {
+      label: 'Trong tuần này',
+      value: [dayjs().startOf('week'), dayjs()],
+    },
+    {
+      label: 'Trong tháng này',
+      value: [dayjs().startOf('month'), dayjs()],
+    },
+    {
+      label: 'Trong tháng trước',
+      value: [dayjs().add(-1, 'month').startOf('month'), dayjs().add(-1, 'month').endOf('month')],
     },
   ]
 };
