@@ -1,13 +1,21 @@
 <template>
-  <div class="about">
-    <h1>List admin</h1>
-  </div>
+  <Breadcrumb></Breadcrumb>
+  <a-card :loading="false" size="small" title="Small size card" class="mt-15 w-100">
+    <template #extra><a href="#">more</a></template>
+    <p>card content</p>
+    <p>card content</p>
+    <p>card content</p>
+    <a-form-item label="UserName" name="username" :rules="[{ required: true }]">
+      <a-input  :width="200" />
+    </a-form-item>
+  </a-card>
 </template>
 <script setup>
-import { useAppStore } from '@/stores/app'
-import {useRoute, useRouter} from "vue-router";
-const app = useAppStore()
-const router = useRouter()
-const route = useRoute()
+import Breadcrumb from '@/components/Breadcrumb.vue'
+import {
+  Card as ACard,
+  FormItem as AFormItem,
+  Input as AInput,
+} from 'ant-design-vue'
 </script>
 <style></style>

@@ -1,6 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import AboutView from '../views/AboutView.vue'
 import { useAppStore } from '@/stores/app'
 import routes from './routes'
 
@@ -10,8 +8,9 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  const app = useAppStore()
+  // const app = useAppStore()
   // app.setLoading()
+  document.title = (to.meta.title ?? 'Mana4.0') + '- Mana4.0'
 })
 
 router.afterEach((to, from) => {})

@@ -8,14 +8,8 @@ export const useAuthStore = defineStore('auth', {
   }),
   getters: {},
   actions: {
-    authenticate(params) {
-      const app = useAppStore()
-      app.setLoading()
-      try {
-      } catch (error) {
-      } finally {
-        app.setLoading(false)
-      }
+    setUser(data) {
+      this.currentUser = data
     }
   }
 })
