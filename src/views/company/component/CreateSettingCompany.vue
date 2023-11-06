@@ -68,6 +68,7 @@
 </template>
 <script setup>
 import dayjs from "dayjs";
+import { filterEmptyArray } from '@/common/helper'
 import Breadcrumb from '@/components/Breadcrumb.vue'
 import AlertErrorMessage from '@/components/AlertErrorMessage.vue'
 import {
@@ -113,18 +114,19 @@ const step = 1
 const nextStep = 2
 
 const validateTrialDate = async (_rule, value) => {
+  value = filterEmptyArray(value)
   if (value && value.length > 0) {
     if (!value[0].isSameOrAfter(dayjs(), 'day')) {
       return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại.')
     }
+    refForm.value.validateFields(['contract_date'])
   }
-
-  refForm.value.validateFields(['contract_date'])
 
   return Promise.resolve();
 };
 
 const validateContractDate = async (_rule, value) => {
+  value = filterEmptyArray(value)
   if (value && value.length > 0) {
     if (!value[0].isSameOrAfter(dayjs(), 'day')) {
       return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại.')
@@ -183,7 +185,7 @@ const changeContractDate = (dates) => {
 
 const rangePresets = ref([
   {
-    label: '7 ngày gần nhất',
+    label: '7 ngày tới',
     value: [dayjs(), dayjs().add(6, 'd')],
   },
   {
@@ -191,11 +193,11 @@ const rangePresets = ref([
     value: [dayjs(), dayjs().endOf('month')],
   },
   {
-    label: '30 ngày gần nhất',
+    label: '30 ngày tới',
     value: [dayjs(), dayjs().add(29, 'd')],
   },
   {
-    label: '1 năm gần nhất',
+    label: '1 năm tới',
     value: [dayjs(), dayjs().add(365, 'd')],
   },
 ]);

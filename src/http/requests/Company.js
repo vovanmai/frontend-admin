@@ -21,6 +21,10 @@ class Company extends Http {
   update (id, data) {
     return this.put(`/${id}`, data)
   }
+
+  remove (id) {
+    return this.delete(`/${id}`)
+  }
 }
 
 export default new Company()

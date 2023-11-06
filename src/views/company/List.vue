@@ -7,7 +7,7 @@
     <a-form
       ref="formRef"
       layout="vertical"
-      :model="state.formSearch"
+      :model="formSearch"
       autocomplete="off"
       @finish="onFinish"
       @finishFailed="onFinishFailed"
@@ -17,30 +17,30 @@
           <a-form-item
             name="code"
             label="Mã code"
-            :rules="state.rules.code"
+            :rules="rules.code"
           >
-            <a-input v-model:value="state.formSearch.code" placeholder="" />
+            <a-input v-model:value="formSearch.code" placeholder="" />
           </a-form-item>
         </a-col>
         <a-col class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="name"
             label="Tên"
-            :rules="state.rules.name"
+            :rules="rules.name"
           >
-            <a-input v-model:value="state.formSearch.name" placeholder="" />
+            <a-input v-model:value="formSearch.name" placeholder="" />
           </a-form-item>
         </a-col>
         <a-col class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="email"
             label="Email"
-            :rules="state.rules.email"
+            :rules="rules.email"
           >
-            <a-input v-model:value="state.formSearch.email" placeholder="" />
+            <a-input v-model:value="formSearch.email" placeholder="" />
           </a-form-item>
         </a-col>
-        <a-col v-show="state.isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+        <a-col v-show="isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="tax_code"
             label="Mã số thuế"
@@ -48,54 +48,57 @@
             <a-input placeholder="" />
           </a-form-item>
         </a-col>
-        <a-col v-show="state.isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+        <a-col v-show="isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="representative"
             label="Người đại diện"
           >
-            <a-input v-model:value="state.formSearch.representative" placeholder="" />
+            <a-input v-model:value="formSearch.representative" placeholder="" />
           </a-form-item>
         </a-col>
-        <a-col v-show="state.isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+        <a-col v-show="isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="phone"
             label="Số điện thoại"
           >
-            <a-input v-model:value="state.formSearch.phone" placeholder="" />
+            <a-input v-model:value="formSearch.phone" placeholder="" />
           </a-form-item>
         </a-col>
-        <a-col v-show="state.isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+        <a-col v-show="isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="address"
             label="Địa chỉ"
           >
-            <a-input v-model:value="state.formSearch.address" placeholder="" />
+            <a-input v-model:value="formSearch.address" placeholder="" />
           </a-form-item>
         </a-col>
-        <a-col v-show="state.isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+        <a-col v-show="isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="business_date"
             label="Ngày kinh doanh"
           >
             <a-date-picker
-              v-model:value="state.formSearch.start_date"
+              v-model:value="formSearch.start_date"
               value-format="YYYY-MM-DD"
               placeholder=""
               class="w-100"
             />
           </a-form-item>
         </a-col>
-        <a-col v-show="state.isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+        <a-col v-show="isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="start_date"
           >
             <template #label>
-              <a-tooltip title="Bắt đầu hợp đồng">
-                Bắt đầu hợp đồng
+              <a-tooltip title="Ngày tạo">
+                Ngày tạo
               </a-tooltip>
             </template>
             <a-range-picker
               class="w-100"
+              :allow-empty="[true, true]"
+              :presets="rangePresets()"
+              v-model:value="formSearch.created_at"
               :placeholder="['Thời gian bắt đầu', 'Thời gian kết thúc']"
             />
           </a-form-item>
@@ -106,7 +109,7 @@
           :sm="{ span: 12}"
           :md="{ span: 12}"
           :lg="{ span: 6}"
-          :xl="{ span: 6, offset: state.offset}">
+          :xl="{ span: 6, offset: offsetCol }">
           <a-form-item>
             <a-space>
               <a-tooltip title="Tìm kiếm">
@@ -119,9 +122,9 @@
                 <a-button @click="resetForm" type="default"><ClearOutlined /></a-button>
               </a-tooltip>
               <a-button type="link" class="pl-01" @click="showMore">
-                {{ state.isShowMore ? 'Ẩn' : 'Hiện' }}
-                <DownOutlined v-show="!state.isShowMore" />
-                <UpOutlined v-show="state.isShowMore" />
+                {{ isShowMore ? 'Ẩn' : 'Hiện' }}
+                <DownOutlined v-show="!isShowMore" />
+                <UpOutlined v-show="isShowMore" />
               </a-button>
             </a-space>
           </a-form-item>
@@ -136,19 +139,18 @@
     <template #extra>
       <router-link :to="{ name: 'company.create' }">
         <a-button
-            type="primary"
+          type="primary"
         ><PlusCircleOutlined />Tạo mới</a-button>
       </router-link>
     </template>
-<!--    :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange }"-->
     <a-table
       :scroll="{ x: true }"
       :showSorterTooltip="false"
       :bordered="true"
       :columns="columns"
-      :data-source="state.companyList"
-      :loading="state.loading"
-      :pagination="state.pagination"
+      :data-source="companyList"
+      :loading="loading"
+      :pagination="pagination"
       :sort-directions="['ascend', 'descend']"
       @change="handleTableChange"
     >
@@ -170,10 +172,12 @@
                   </router-link>
                 </a-menu-item>
                 <a-menu-item>
-                  <InfoCircleOutlined />
-                  <span class="ml-5">Chi tiết</span>
+                  <router-link :to="{ name: 'company.edit', params: { id: record.id }, query: { step: 3 }}">
+                    <InfoCircleOutlined />
+                    <span class="ml-5">Chi tiết</span>
+                  </router-link>
                 </a-menu-item>
-                <a-menu-item @click="showModalConfirm">
+                <a-menu-item @click="deleteCompany(record.id)">
                   <DeleteOutlined />
                   <span class="ml-5">Xóa</span>
                 </a-menu-item>
@@ -187,12 +191,13 @@
 </template>
 <script setup>
 import Breadcrumb from '@/components/Breadcrumb.vue'
+import { showNotification, rangePresets } from '@/common/helper'
 import { useRouter } from "vue-router";
 const router = useRouter()
 import { useAppStore } from '@/stores/app'
 import companyRequest from '@/http/requests/Company'
 const app = useAppStore()
-import { isEmpty, pickBy, get } from 'lodash';
+import { isEmpty, pickBy, get, cloneDeep } from 'lodash';
 import {
   Row as ARow,
   Col as ACol,
@@ -211,6 +216,7 @@ import {
   MenuItem as AMenuItem,
   Dropdown as ADropdown,
   Popconfirm as APopconfirm,
+  Tour as ATour,
   Modal,
 } from 'ant-design-vue'
 import {
@@ -226,57 +232,72 @@ import {
   ExclamationCircleOutlined,
 } from '@ant-design/icons-vue'
 import { reactive, ref, computed, h } from 'vue';
+import dayjs from 'dayjs';
 const formRef = ref(null);
 
-const state = reactive({
-  isShowMore: false,
-  offset: 0,
-  loading: false,
-  formSearch: {
-    name: '',
-    code: '',
-    phone: '',
-    tax_code: '',
-    email: '',
-    representative: '',
-    address: '',
-    start_date: '',
-  },
-  companyList: [],
-  pagination: {
-    total: null,
-    current: 1,
-    pageSize: 15,
-    showTotal: (total, range) => `${range[0]}-${range[1]} của tổng ${total}`,
-    pageSizeOptions: ['15', '30', '50', '100']
-  },
-  selectedRowKeys: [],
-  rules: {
-    code: [
-      { max: 50, message: 'Tối đa là 50 ký tự.' },
-    ],
-    name: [
-      { max: 50, message: 'Tối đa là 50 ký tự.' },
-    ],
-    email: [
-      { max: 50, message: 'Tối đa là 50 ký tự.' },
-    ]
-  }
-});
+const formSearch = reactive({
+  name: '',
+  code: '',
+  phone: '',
+  tax_code: '',
+  email: '',
+  representative: '',
+  address: '',
+  created_at: [],
+})
+
+const pagination = reactive({
+  total: null,
+  current: 1,
+  pageSize: 15,
+  showTotal: (total, range) => `${range[0]}-${range[1]} của tổng ${total}`,
+  pageSizeOptions: ['15', '30', '50', '100']
+})
+
+const rules = {
+  code: [
+    { max: 50, message: 'Tối đa là 50 ký tự.' },
+  ],
+  name: [
+    { max: 50, message: 'Tối đa là 50 ký tự.' },
+  ],
+  email: [
+    { max: 50, message: 'Tối đa là 50 ký tự.' },
+  ]
+}
+
+const offsetCol = ref(0)
+
+const isShowMore = ref(false)
+
+const loading = ref(false)
+
+const companyList = ref([])
+
 const showMore = () => {
-  state.isShowMore = !state.isShowMore
-  if (state.isShowMore) {
-    state.offset = 12
+  isShowMore.value = !isShowMore.value
+  if (isShowMore.value) {
+    offsetCol.value = 12
   } else {
-    state.offset = 0
+    offsetCol.value = 0
   }
 }
 const onFinish = values => {
-  if (state.loading) {
+  if (loading.value) {
     return
   }
-  state.loading = true
-  const dataSearch = pickBy(state.formSearch, (value) => { return value !== '' })
+  loading.value = true
+  let dataSearch = cloneDeep(formSearch)
+  console.log(dataSearch)
+  if (get(dataSearch, 'created_at.0')) {
+    dataSearch.created_at_from = get(dataSearch, 'created_at.0').format('YYYY-MM-DD')
+  }
+
+  if (get(dataSearch, 'created_at.1')) {
+    dataSearch.created_at_to = get(dataSearch, 'created_at.1').format('YYYY-MM-DD')
+  }
+  dataSearch.created_at = ''
+  dataSearch = pickBy(dataSearch, (value) => { return value !== '' })
   router.push({name: 'company.list', query: dataSearch})
   getCompanies(dataSearch)
 };
@@ -285,18 +306,24 @@ const onFinishFailed = errorInfo => {
 const resetForm = () => {
   router.push({name: 'company.list'})
   formRef.value.resetFields();
-  state.formSearch.code = ''
-  state.formSearch.name = ''
-  state.formSearch.phone = ''
-  state.formSearch.tax_code = ''
-  state.formSearch.email = ''
-  state.formSearch.representative = ''
-  state.formSearch.address = ''
-  state.formSearch.start_date = ''
-  state.pagination.pageSize = 15
+  formSearch.code = ''
+  formSearch.created_at = []
+  formSearch.name = ''
+  formSearch.phone = ''
+  formSearch.tax_code = ''
+  formSearch.email = ''
+  formSearch.representative = ''
+  formSearch.address = ''
+  formSearch.start_date = ''
+  pagination.pageSize = 15
   getCompanies()
 };
 const columns = [
+  {
+    title: 'ID',
+    dataIndex: 'id',
+    sorter: true,
+  },
   {
     title: 'Mã code',
     dataIndex: 'code',
@@ -332,15 +359,15 @@ const columns = [
     key: 'action',
   },
 ];
-const handleTableChange = (pagination, filters, sorter, extra) => {
-  state.pagination.current = pagination.current
-  state.pagination.pageSize = pagination.pageSize
-  state.pagination.total = pagination.total
+const handleTableChange = (paginationData, filters, sorter, extra) => {
+  pagination.current = paginationData.current
+  pagination.pageSize = paginationData.pageSize
+  pagination.total = paginationData.total
 
   let params = {
-    ...state.formSearch,
-    per_page: pagination.pageSize,
-    page: pagination.current,
+    ...formSearch,
+    per_page: paginationData.pageSize,
+    page: paginationData.current,
   }
   if (!isEmpty(sorter) && sorter.order) {
     params.sort_column = sorter.field
@@ -351,10 +378,8 @@ const handleTableChange = (pagination, filters, sorter, extra) => {
   router.push({name: 'company.list', query: params})
   getCompanies(params)
 }
-const onSelectChange = selectedRowKeys => {
-  state.selectedRowKeys = selectedRowKeys;
-};
-const showModalConfirm = () => {
+
+const deleteCompany = (id) => {
   Modal.confirm({
     title: 'Bạn có chắn chắn không?',
     icon: h(ExclamationCircleOutlined),
@@ -362,33 +387,53 @@ const showModalConfirm = () => {
     okText: 'Có',
     okType: 'danger',
     cancelText: 'Không',
-    onOk() {
+    async onOk() {
+      try {
+        await companyRequest.remove(id);
+        showNotification('Xóa thành công', 'success')
+      } catch (error) {
+
+      }
     },
   });
 };
 const routerQuery = router.currentRoute.value.query
-state.pagination.current = Number(routerQuery.page ?? 1)
-state.pagination.pageSize = Number(routerQuery.per_page ?? 15)
-state.formSearch.code = routerQuery.code ?? ''
-state.formSearch.name = routerQuery.name ?? ''
-state.formSearch.phone = routerQuery.phone ?? ''
-state.formSearch.tax_code = routerQuery.tax_code ?? ''
-state.formSearch.email = routerQuery.email ?? ''
-state.formSearch.representative = routerQuery.representative ?? ''
-state.formSearch.address = routerQuery.address ?? ''
-state.formSearch.start_date = routerQuery.start_date ?? ''
+pagination.current = Number(routerQuery.page ?? 1)
+pagination.pageSize = Number(routerQuery.per_page ?? 15)
+formSearch.code = routerQuery.code ?? ''
+formSearch.name = routerQuery.name ?? ''
+formSearch.phone = routerQuery.phone ?? ''
+formSearch.tax_code = routerQuery.tax_code ?? ''
+formSearch.email = routerQuery.email ?? ''
+formSearch.representative = routerQuery.representative ?? ''
+formSearch.address = routerQuery.address ?? ''
+formSearch.start_date = routerQuery.start_date ?? ''
+const createdAtFrom = routerQuery.created_at_from
+const createdAtTo = routerQuery.created_at_to
+
+if (createdAtFrom && createdAtTo) {
+  formSearch.created_at = [dayjs(createdAtFrom), dayjs(createdAtTo)]
+} else {
+  if (createdAtFrom) {
+    formSearch.created_at = [dayjs(createdAtFrom), '']
+  }
+
+  if (createdAtTo) {
+    formSearch.created_at = ['', dayjs(createdAtTo)]
+  }
+}
 
 const initData = () => {
-  const dataSearch = pickBy(state.formSearch, (value) => { return value !== '' })
+  const dataSearch = pickBy(formSearch, (value) => { return value !== '' })
   getCompanies(dataSearch)
 }
 
 const getCompanies = async (params) => {
-  state.loading = true
+  loading.value = true
   const response = await companyRequest.list(params);
-  state.loading = false
-  state.companyList = get(response, 'data.data', [])
-  state.pagination.total = get(response, 'data.total')
+  loading.value = false
+  companyList.value = get(response, 'data.data', [])
+  pagination.total = get(response, 'data.total')
 }
 
 initData()

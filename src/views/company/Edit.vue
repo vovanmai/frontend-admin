@@ -224,16 +224,19 @@ const getCompanyDetail = async () => {
     const trialStartDate = get(data, 'setting.trial_start_date', '')
     const trialEndDate = get(data, 'setting.trial_end_date', '')
     form.company_setting.trial_date = [
-      trialStartDate ? dayjs(trialStartDate) : '',
-      trialEndDate ? dayjs(trialEndDate) : '',
+      trialStartDate ? dayjs(trialStartDate) : null,
+      trialEndDate ? dayjs(trialEndDate) : null,
     ]
 
-    form.company_admin.name = data.super_admin.name
-    form.company_admin.email = data.super_admin.email
+    form.company_admin.name = get(data, 'super_admin.name', '')
+    form.company_admin.email = get(data, 'super_admin.email', '')
   } catch (error) {
   }
 }
 getCompanyDetail()
+
+const step = router.currentRoute.value.query.step
+state.currentStep = Number(step ? step : 0)
 
 </script>
 <style>
