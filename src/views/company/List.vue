@@ -44,14 +44,16 @@
           <a-form-item
             name="tax_code"
             label="Mã số thuế"
+            :rules="rules.tax_code"
           >
-            <a-input placeholder="" />
+            <a-input v-model:value="formSearch.tax_code" placeholder="" />
           </a-form-item>
         </a-col>
         <a-col v-show="isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
           <a-form-item
             name="representative"
             label="Người đại diện"
+            :rules="rules.representative"
           >
             <a-input v-model:value="formSearch.representative" placeholder="" />
           </a-form-item>
@@ -60,6 +62,7 @@
           <a-form-item
             name="phone"
             label="Số điện thoại"
+            :rules="rules.phone"
           >
             <a-input v-model:value="formSearch.phone" placeholder="" />
           </a-form-item>
@@ -68,21 +71,9 @@
           <a-form-item
             name="address"
             label="Địa chỉ"
+            :rules="rules.address"
           >
             <a-input v-model:value="formSearch.address" placeholder="" />
-          </a-form-item>
-        </a-col>
-        <a-col v-show="isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
-          <a-form-item
-            name="business_date"
-            label="Ngày kinh doanh"
-          >
-            <a-date-picker
-              v-model:value="formSearch.start_date"
-              value-format="YYYY-MM-DD"
-              placeholder=""
-              class="w-100"
-            />
           </a-form-item>
         </a-col>
         <a-col v-show="isShowMore" class="gutter-row" :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
@@ -191,6 +182,7 @@
 </template>
 <script setup>
 import Breadcrumb from '@/components/Breadcrumb.vue'
+import Constant from '@/constants/constant'
 import { showNotification, rangePresets } from '@/common/helper'
 import { useRouter } from "vue-router";
 const router = useRouter()
@@ -256,14 +248,28 @@ const pagination = reactive({
 
 const rules = {
   code: [
-    { max: 50, message: 'Tối đa là 50 ký tự.' },
+    { max: 50, message: 'Không được lớn hơn 50 ký tự.'},
+    { pattern: Constant.REGEX_CODE, message: 'Không đúng định dạng (bao gồm: a-zA-Z0-9-_)' },
   ],
   name: [
-    { max: 50, message: 'Tối đa là 50 ký tự.' },
+    { max: 100, message: 'Không được lớn hơn 100 ký tự.'},
+  ],
+  representative: [
+    { max: 100, message: 'Không được lớn hơn 100 ký tự.'},
   ],
   email: [
-    { max: 50, message: 'Tối đa là 50 ký tự.' },
-  ]
+    { type: 'email', message: 'Địa chỉ email không hợp lệ.' },
+    { max: 100, message: 'Không được lớn hơn 100 ký tự.'},
+  ],
+  phone: [
+    { pattern: Constant.REGEX_PHONE, message: 'Số điện thoại không hợp lệ.' },
+  ],
+  tax_code: [
+    { pattern: Constant.REGEX_TAX_CODE, message: 'Mã số thuế không hợp lệ.' },
+  ],
+  address: [
+    { max: 255, message: 'Không được lớn hơn 255 ký tự.'},
+  ],
 }
 
 const offsetCol = ref(0)
@@ -277,7 +283,7 @@ const companyList = ref([])
 const showMore = () => {
   isShowMore.value = !isShowMore.value
   if (isShowMore.value) {
-    offsetCol.value = 12
+    offsetCol.value = 18
   } else {
     offsetCol.value = 0
   }
@@ -288,7 +294,6 @@ const onFinish = values => {
   }
   loading.value = true
   let dataSearch = cloneDeep(formSearch)
-  console.log(dataSearch)
   if (get(dataSearch, 'created_at.0')) {
     dataSearch.created_at_from = get(dataSearch, 'created_at.0').format('YYYY-MM-DD')
   }

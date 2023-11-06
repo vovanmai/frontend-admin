@@ -4,7 +4,7 @@ import routeError from "./error";
 
 const mainRoutes = [
   routeCompany,
-  routeAdmin,
+  // routeAdmin,
   ...routeError,
 ]
 

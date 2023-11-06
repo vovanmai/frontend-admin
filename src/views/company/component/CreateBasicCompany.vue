@@ -18,7 +18,7 @@
         has-feedback
         label="Tên công ty"
         name="name"
-        :rules="state.rules.name"
+        :rules="rules.name"
         :validateFirst="true"
       >
         <a-input ref="refInput" v-model:value="form.name" />
@@ -28,7 +28,7 @@
         label="Mã code"
         name="code"
         :validateFirst="true"
-        :rules="state.rules.code"
+        :rules="rules.code"
       >
         <a-input v-model:value="form.code" />
       </a-form-item>
@@ -37,7 +37,7 @@
         has-feedback
         label="Người đại diện"
         name="representative"
-        :rules="state.rules.representative"
+        :rules="rules.representative"
       >
         <a-input v-model:value="form.representative" />
       </a-form-item>
@@ -46,7 +46,7 @@
         has-feedback
         label="Địa chỉ email"
         name="email"
-        :rules="state.rules.email"
+        :rules="rules.email"
       >
         <a-input v-model:value="form.email" />
       </a-form-item>
@@ -55,7 +55,7 @@
         has-feedback
         label="Số điện thoại"
         name="phone"
-        :rules="state.rules.phone"
+        :rules="rules.phone"
       >
         <a-input v-model:value="form.phone" />
       </a-form-item>
@@ -64,7 +64,7 @@
         has-feedback
         label="Mã số thuế"
         name="tax_code"
-        :rules="state.rules.tax_code"
+        :rules="rules.tax_code"
       >
         <a-input v-model:value="form.tax_code" />
       </a-form-item>
@@ -73,7 +73,7 @@
         has-feedback
         label="Địa chỉ"
         name="address"
-        :rules="state.rules.address"
+        :rules="rules.address"
       >
         <a-input v-model:value="form.address" />
       </a-form-item>
@@ -120,57 +120,49 @@ const props = defineProps({
     type: Object,
     required: true
   },
-  error: {
-    type: Object,
-    required: true
-  },
 })
 const emit = defineEmits(['validateSuccess', 'changeStep'])
 
 const step = 0
 const nextStep = 1
+const rules = {
+  code: [
+    { max: 50, message: 'Không được lớn hơn 50 ký tự.'},
+    { pattern: Constant.REGEX_CODE, message: 'Không đúng định dạng (bao gồm: a-zA-Z0-9-_)' },
+  ],
+  name: [
+    { required: true, message: 'Không được rỗng.' },
+    { max: 100, message: 'Không được lớn hơn 100 ký tự.'},
+  ],
+  representative: [
+    { required: true, message: 'Không được rỗng.' },
+    { max: 100, message: 'Không được lớn hơn 100 ký tự.'},
+  ],
+  email: [
+    { required: true, message: 'Không được rỗng.' },
+    { type: 'email', message: 'Địa chỉ email không hợp lệ.' },
+    { max: 100, message: 'Không được lớn hơn 100 ký tự.'},
+  ],
+  phone: [
+    { required: true, message: 'Không được rỗng.' },
+    { pattern: Constant.REGEX_PHONE, message: 'Số điện thoại không hợp lệ.' },
+  ],
+  tax_code: [
+    { required: true, message: 'Không được rỗng.' },
+    { pattern: Constant.REGEX_TAX_CODE, message: 'Mã số thuế không hợp lệ.' },
+  ],
+  address: [
+    { required: true, message: 'Không được rỗng.' },
+    { max: 255, message: 'Không được lớn hơn 255 ký tự.'},
+  ],
+}
 
-const state = reactive({
-  rules: {
-    code: [
-      { max: 50, message: 'Không được lớn hơn 50 ký tự.'},
-      { pattern: Constant.REGEX_CODE, message: 'Không đúng định dạng (bao gồm: a-zA-Z0-9-_)' },
-    ],
-    name: [
-      { required: true, message: 'Không được rỗng.' },
-      { max: 100, message: 'Không được lớn hơn 100 ký tự.'},
-    ],
-    representative: [
-      { required: true, message: 'Không được rỗng.' },
-      { max: 100, message: 'Không được lớn hơn 100 ký tự.'},
-    ],
-    email: [
-      { required: true, message: 'Không được rỗng.' },
-      { type: 'email', message: 'Địa chỉ email không hợp lệ.' },
-      { max: 100, message: 'Không được lớn hơn 100 ký tự.'},
-    ],
-    phone: [
-      { required: true, message: 'Không được rỗng.' },
-      { pattern: Constant.REGEX_PHONE, message: 'Số điện thoại không hợp lệ.' },
-    ],
-    tax_code: [
-      { required: true, message: 'Không được rỗng.' },
-      { pattern: Constant.REGEX_TAX_CODE, message: 'Mã số thuế không hợp lệ.' },
-    ],
-    address: [
-      { required: true, message: 'Không được rỗng.' },
-      { max: 255, message: 'Không được lớn hơn 255 ký tự.'},
-    ],
-  },
-  isCodeError: false,
-})
 const onFinish = values => {
   emit('validateSuccess', step)
   emit('changeStep', nextStep)
 };
 const onFinishFailed = async (error) => {
-  const index = findIndex(error.errorFields, function(item) { return item.name[0] == 'code' })
-  state.isCodeError = index >= 0
+
 };
 const validateForm = async () => {
   try {

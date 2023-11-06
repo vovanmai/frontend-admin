@@ -101,10 +101,6 @@ const props = defineProps({
     type: Object,
     required: true
   },
-  error: {
-    type: Object,
-    required: true
-  },
 })
 
 const emit = defineEmits(['validateSuccess', 'changeStep'])
