@@ -184,7 +184,7 @@ const onEditCompany = async () => {
       formSubmit.company_setting.trial_start_date = null
     }
 
-    if (get(formSubmit, 'company_setting.contract_date.1')) {
+    if (get(formSubmit, 'company_setting.trial_date.1')) {
       formSubmit.company_setting.trial_end_date = get(formSubmit, 'company_setting.trial_date.1').format('YYYY-MM-DD')
     } else {
       formSubmit.company_setting.trial_end_date = null
